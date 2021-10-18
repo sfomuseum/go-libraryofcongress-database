@@ -12,7 +12,7 @@ The first goal is to have a simple, bare-bones HTTP server for querying data in 
 
 The second goal is to be able to build, compile and deploy the web application and all its data (as SQLite databases) as a self-contained container image to a low-cost service like AWS App Runner.
 
-A third goal is to have a generic database interface such that the same code can be used with a variety of databases. As written the `server` tool only has a single database "driver" for local SQLite databases but there are tools for indexing data in both Elasticsearch and SQLite databases.
+A third goal is to have a generic database interface such that the same code can be used with a variety of databases. As written the `server` tool only has a single database "driver" for querying SQLite databases but there are tools for indexing data in both Elasticsearch and SQLite databases.
 
 ## Data
 
