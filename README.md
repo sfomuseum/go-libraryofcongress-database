@@ -18,7 +18,8 @@ A third goal is to have a generic database interface such that the same code can
 
 A sample SQLite database for Library of Congress subject headings is currently included with this package in the [data folder](data). Some notes:
 
-* The tools used to create this database are not included in this package yet.
+* This database is stored using `git-lfs`.
+* The tools used to create this databases are not included in this package yet.
 * It is not clear whether an equivalent (or combined) database for Library of Congress named authorities will ever be included because it is very large.
 * Eventually bundled data may be removed entirely.
 * As written the code only handles a subset of all the possible (CSV) columns produced by the `sfomuseum/go-libraryofcongress` tools. Specifically: `id` and `label`. A third `source` column is appended to the databases to distinguish between Library of Congress subject heading and name authority file records.
