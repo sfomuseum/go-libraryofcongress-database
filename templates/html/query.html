@@ -1,0 +1,66 @@
+{{ define "query" }}
+{{ template "inc_head" . }}
+<div class="row">
+    
+{{ if .Query }}
+
+<h2>Results for <q>{{ .Query }}</q></h2>
+
+{{ if .Error }}
+<p>There was a problem comleting your request. The reported error was: <code>{{ .Error }}</code>.</p>
+{{ end }}
+
+{{ if eq 0 (len .Results) }}
+<p>There are no results for your query.</p>
+{{ else }}
+
+<p>
+    {{ if eq .Pagination.Total 1 }}
+    There is one result for your query.
+    {{ else }}
+    There are {{ .Pagination.Total }} results for your query
+    {{ if gt .Pagination.Pages 1 }} and this is page {{ .Pagination.Page }} of {{ .Pagination.Pages }}{{ end }}.
+    {{ end }}
+</p>
+
+<table class="table">
+    <tr>
+	<th>ID</th>
+	<th>Label</th>
+	<th>Source</th>	
+    </tr>
+    
+{{  range $i, $r := .Results }}
+
+    <tr>
+	<td>
+	    {{ if eq "lcsh" $r.Source }}
+	    <a href="https://id.loc.gov/authorities/subjects/{{ $r.Id }}.html" target="libraryofcongress">{{ $r.Id }}</a>
+	    {{ else if eq "lcnaf" $r.Source }}
+	    <a href="https://id.loc.gov/authorities/names/{{ $r.Id }}.html" target="libraryofcongress">{{ $r.Id }}</a>	    
+	    {{ else }}
+	    <code>{{ $r.Id }}</code>
+	    {{ end }}
+	</td>
+	<td>{{ $r.Label }}</td>
+	<td>{{ $r.Source }}</td>	
+    </tr>
+    {{ end }}
+    
+</table>
+
+<div style="display:flex; justify-content:center;">
+    <div style="display:inline;margin:.5rem;">{{ if gt .Pagination.PreviousPage 0 }}<a href="/?q={{ .Query }}&page={{ .Pagination.PreviousPage }}">previous</a>{{ else }}&#160;{{ end }}</div>
+    <div style="display:inline;margin:.5rem;">{{ if gt .Pagination.NextPage 0 }}<a href="/?q={{ .Query }}&page={{ .Pagination.NextPage }}">next</a>{{ else }}&#160;{{ end }}</div>    
+</div>
+
+{{ end }}
+
+{{ else }}
+
+<p>Enter a search term above.</p>
+{{ end }}
+
+</div>
+{{ template "inc_foot" . }}
+{{ end }}

@@ -1,0 +1,41 @@
+# github.com/aaronland/go-http-bootstrap v0.1.0
+## explicit
+github.com/aaronland/go-http-bootstrap
+github.com/aaronland/go-http-bootstrap/static
+# github.com/aaronland/go-http-rewrite v0.0.6
+github.com/aaronland/go-http-rewrite
+# github.com/aaronland/go-http-sanitize v0.0.6
+## explicit
+github.com/aaronland/go-http-sanitize
+# github.com/aaronland/go-http-server v0.0.7
+## explicit
+github.com/aaronland/go-http-server
+# github.com/aaronland/go-pagination v0.0.3
+## explicit
+github.com/aaronland/go-pagination
+github.com/aaronland/go-pagination/countable
+# github.com/aaronland/go-pagination-sql v0.0.4
+## explicit
+github.com/aaronland/go-pagination-sql
+# github.com/aaronland/go-roster v0.0.2
+## explicit
+github.com/aaronland/go-roster
+# github.com/aws/aws-lambda-go v1.10.0
+github.com/aws/aws-lambda-go/events
+github.com/aws/aws-lambda-go/lambda
+github.com/aws/aws-lambda-go/lambda/handlertrace
+github.com/aws/aws-lambda-go/lambda/messages
+github.com/aws/aws-lambda-go/lambdacontext
+# github.com/mattn/go-sqlite3 v1.14.8
+## explicit
+github.com/mattn/go-sqlite3
+# github.com/sfomuseum/go-flags v0.8.2
+## explicit
+github.com/sfomuseum/go-flags/flagset
+# github.com/whosonfirst/algnhsa v0.1.0
+github.com/whosonfirst/algnhsa
+# github.com/whosonfirst/go-sanitize v0.1.0
+github.com/whosonfirst/go-sanitize
+# golang.org/x/net v0.0.0-20201002202402-0a1ea396d57c
+golang.org/x/net/html
+golang.org/x/net/html/atom
