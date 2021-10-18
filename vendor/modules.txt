@@ -20,15 +20,32 @@ github.com/aaronland/go-pagination-sql
 # github.com/aaronland/go-roster v0.0.2
 ## explicit
 github.com/aaronland/go-roster
+# github.com/aaronland/go-sqlite v0.1.0
+## explicit
+github.com/aaronland/go-sqlite
+github.com/aaronland/go-sqlite/database
 # github.com/aws/aws-lambda-go v1.10.0
 github.com/aws/aws-lambda-go/events
 github.com/aws/aws-lambda-go/lambda
 github.com/aws/aws-lambda-go/lambda/handlertrace
 github.com/aws/aws-lambda-go/lambda/messages
 github.com/aws/aws-lambda-go/lambdacontext
+# github.com/cenkalti/backoff/v4 v4.1.1
+## explicit
+github.com/cenkalti/backoff/v4
+# github.com/elastic/go-elasticsearch/v7 v7.13.1
+## explicit
+github.com/elastic/go-elasticsearch/v7
+github.com/elastic/go-elasticsearch/v7/esapi
+github.com/elastic/go-elasticsearch/v7/estransport
+github.com/elastic/go-elasticsearch/v7/esutil
+github.com/elastic/go-elasticsearch/v7/internal/version
 # github.com/mattn/go-sqlite3 v1.14.8
 ## explicit
 github.com/mattn/go-sqlite3
+# github.com/sfomuseum/go-csvdict v0.0.1
+## explicit
+github.com/sfomuseum/go-csvdict
 # github.com/sfomuseum/go-flags v0.8.2
 ## explicit
 github.com/sfomuseum/go-flags/flagset

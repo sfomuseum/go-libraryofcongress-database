@@ -8,18 +8,18 @@ This is work in progress and not documented properly yet. The code will continue
 
 ## Motivation
 
-The first goal is to have a simple, bare-bones HTTP server for querying data in the CSV files produced by the [sfomuseum/go-libraryofcongress](https://github.com/sfomuseum/go-libraryofcongress) package. 
+The first goal is to have a simple, bare-bones HTTP server for querying data in the CSV files produced by the [sfomuseum/go-libraryofcongress](https://github.com/sfomuseum/go-libraryofcongress) package.
 
 The second goal is to be able to build, compile and deploy the web application and all its data (as SQLite databases) as a self-contained container image to a low-cost service like AWS App Runner.
 
-A third goal is to have a generic database interface such that the same code can be used with a variety of databases. As written there is only a single database "driver" for local SQLite databases
+A third goal is to have a generic database interface such that the same code can be used with a variety of databases. As written the `server` tool only has a single database "driver" for local SQLite databases but there are tools for indexing data in both Elasticsearch and SQLite databases.
 
 ## Data
 
 A sample SQLite database for Library of Congress subject headings is currently included with this package in the [data folder](data). Some notes:
 
 * This database is stored using `git-lfs`.
-* The tools used to create this databases are not included in this package yet.
+* This databases was created using the `to-sqlite` tool described below.
 * It is not clear whether an equivalent (or combined) database for Library of Congress named authorities will ever be included because it is very large.
 * Eventually bundled data may be removed entirely.
 * As written the code only handles a subset of all the possible (CSV) columns produced by the `sfomuseum/go-libraryofcongress` tools. Specifically: `id` and `label`. A third `source` column is appended to the databases to distinguish between Library of Congress subject heading and name authority file records.
@@ -27,16 +27,6 @@ A sample SQLite database for Library of Congress subject headings is currently i
 ## Databases
 
 _To be written_
-
-### SQL(ite)
-
-As mentioned the tools to produce the SQLite databases are not included with this package yet. The SQLite database consists of a single `FTS` enable "search" table that indexes three columns:
-
-```
-CREATE VIRTUAL TABLE search USING fts4(
-		id, source, label
-	)
-```	
 
 ## Tools
 
@@ -105,13 +95,54 @@ $> curl -s 'http://localhost:8080/api/query?q=SQL' | jq
 }
 ```
 
+#### Notes
+
+* The `server` tool only supports SQLite databases as of this writing.
+* The `server` tool does not yet have the ability to define custom prefixes for URLs. For the time being it is assumed that everything is served from a root `/` URL.
+
+### to-elasticsearch
+
+The `to-elasticsearch` tool will index CSV data produced by the tools in `sfomuseum/go-libraryofcongress` in an Elasticsearch index.
+
+```
+$> ./bin/to-elasticsearch -h /Users/asc/sfomuseum/go-libraryofcongress-database                                                    
+Usage of ./bin/to-elasticsearch:
+  -elasticsearch-endpoint string
+    	The Elasticsearch endpoint where data should be indexed. (default "http://localhost:9200")
+  -elasticsearch-index string
+    	The Elasticsearch index where data should be stored. (default "libraryofcongress")
+  -lcnaf-data string
+    	The path to your LCNAF CSV data.
+  -lcsh-data string
+    	The path to your LCSH CSV data.
+  -workers int
+    	The number of concurrent workers to use when indexing data. (default 10)
+```
+
+### to-sqlite
+
+The `to-sqlite` tool will index CSV data produced by the tools in `sfomuseum/go-libraryofcongress` in a SQLite database.
+
+```
+$> ./bin/to-sqlite -h
+Usage of ./bin/to-sqlite:
+  -dsn string
+    	The SQLite DSN for the database you want to create. (default "libraryofcongress.db")
+  -lcnaf-data string
+    	The path to your LCNAF CSV data.
+  -lcsh-data string
+    	The path to your LCSH CSV data.
+```
+
 ## Docker
 
-Yes. The simplest way to get started is to run the `docker` target in this package's Makefile:
+Yes, there is a Dockerfile for the `server` tool. The simplest way to get started is to run the `docker` target in this package's Makefile:
 
 ```
 $> make docker
 ```
+
+And then to start the server:
 
 ```
 $> docker run -it -p 8080:8080 \
