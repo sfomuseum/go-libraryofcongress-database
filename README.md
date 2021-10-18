@@ -1,6 +1,6 @@
 # go-libraryofcongress-database
 
-Go package providing simple database and server interfaces for the CSV files produced by [sfomuseum/go-libraryofcongress](https://github.com/sfomuseum/go-libraryofcongress).
+Go package providing simple database and server interfaces for the CSV files produced by the [sfomuseum/go-libraryofcongress](https://github.com/sfomuseum/go-libraryofcongress) package.
 
 ## Important
 
