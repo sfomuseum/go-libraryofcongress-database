@@ -4,7 +4,7 @@ go 1.16
 
 // Pin to elastic/go-elasticsearch/v7 v7.13.0 because later versions
 // don't work with AWS Elasticsearch anymore. Sigh...
-	  
+
 require (
 	github.com/aaronland/go-http-bootstrap v0.1.0
 	github.com/aaronland/go-http-sanitize v0.0.6
@@ -18,4 +18,5 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.8
 	github.com/sfomuseum/go-csvdict v0.0.1
 	github.com/sfomuseum/go-flags v0.8.2
+	github.com/sfomuseum/go-timings v0.0.1
 )

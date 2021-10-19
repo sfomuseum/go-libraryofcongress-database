@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"github.com/elastic/go-elasticsearch/v7/esutil"
 	loc_database "github.com/sfomuseum/go-libraryofcongress-database"
-	loc_timings "github.com/sfomuseum/go-libraryofcongress-database/timings"
+	"github.com/sfomuseum/go-timings"
 	"log"
 )
 
-func Index(ctx context.Context, data_sources []*loc_database.Source, bi esutil.BulkIndexer, monitor *loc_timings.Monitor) error {
+func Index(ctx context.Context, data_sources []*loc_database.Source, bi esutil.BulkIndexer, monitor timings.Monitor) error {
 
 	for _, src := range data_sources {
 
@@ -27,7 +27,7 @@ func Index(ctx context.Context, data_sources []*loc_database.Source, bi esutil.B
 	return nil
 }
 
-func index(ctx context.Context, src *loc_database.Source, bi esutil.BulkIndexer, monitor *loc_timings.Monitor) error {
+func index(ctx context.Context, src *loc_database.Source, bi esutil.BulkIndexer, monitor timings.Monitor) error {
 
 	cb := func(ctx context.Context, row map[string]string) error {
 
@@ -73,7 +73,7 @@ func index(ctx context.Context, src *loc_database.Source, bi esutil.BulkIndexer,
 			return nil
 		}
 
-		go monitor.Increment(ctx)
+		go monitor.Signal(ctx)
 		return nil
 	}
 

@@ -32,6 +32,8 @@ github.com/sfomuseum/go-csvdict v0.0.1 h1:Cj8/qXXBJBxCjgorHW5QdRWEGCZpXc+qpdKH9C
 github.com/sfomuseum/go-csvdict v0.0.1/go.mod h1:KGO283kbQh+sqZq84XIj7qr0ImaGY2NX3hedUmAo/sI=
 github.com/sfomuseum/go-flags v0.8.2 h1:elSU3KWMo442d1YjXu5Y/bokxvkGV+OrgAHshHZaeIo=
 github.com/sfomuseum/go-flags v0.8.2/go.mod h1:ML3DTNbF9xnjExSdS/9FtVLjIUhRU5gm/ehzISv+t2w=
+github.com/sfomuseum/go-timings v0.0.1 h1:DZ5RrdzLHCho5iuYUZyV2In18LxQrzd+sHHvbxhl8J4=
+github.com/sfomuseum/go-timings v0.0.1/go.mod h1:5J83BoWlLLoCh2j4mrhKx2Oz7f4kePbQLuYAKII3BFQ=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/whosonfirst/algnhsa v0.1.0 h1:8wVksKaz1qor2Y6+fiLEPEPxsEEvUQgSdtSTQLMrnlA=

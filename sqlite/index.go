@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"github.com/aaronland/go-sqlite"
 	loc_database "github.com/sfomuseum/go-libraryofcongress-database"
-	loc_timings "github.com/sfomuseum/go-libraryofcongress-database/timings"
+	"github.com/sfomuseum/go-timings"
 	"log"
 )
 
-func Index(ctx context.Context, sources []*loc_database.Source, sqlite_db sqlite.Database, tables []sqlite.Table, monitor *loc_timings.Monitor) error {
+func Index(ctx context.Context, sources []*loc_database.Source, sqlite_db sqlite.Database, tables []sqlite.Table, monitor timings.Monitor) error {
 
 	for _, src := range sources {
 
@@ -25,7 +25,7 @@ func Index(ctx context.Context, sources []*loc_database.Source, sqlite_db sqlite
 	return nil
 }
 
-func index(ctx context.Context, src *loc_database.Source, db sqlite.Database, tables []sqlite.Table, monitor *loc_timings.Monitor) error {
+func index(ctx context.Context, src *loc_database.Source, db sqlite.Database, tables []sqlite.Table, monitor timings.Monitor) error {
 
 	cb := func(ctx context.Context, row map[string]string) error {
 
@@ -37,7 +37,7 @@ func index(ctx context.Context, src *loc_database.Source, db sqlite.Database, ta
 				return fmt.Errorf("Failed to index %v in table %s, %w", row, t.Name(), err)
 			}
 
-			go monitor.Increment(ctx)
+			go monitor.Signal(ctx)
 		}
 
 		return nil
