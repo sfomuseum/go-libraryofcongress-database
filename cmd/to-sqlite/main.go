@@ -1,19 +1,18 @@
 package main
 
 import (
-	"compress/bzip2"
 	"context"
 	_ "database/sql"
 	"flag"
-	"fmt"
 	"github.com/aaronland/go-sqlite"
 	"github.com/aaronland/go-sqlite/database"
-	"github.com/sfomuseum/go-csvdict"
+	loc_database "github.com/sfomuseum/go-libraryofcongress-database"
+	loc_sqlite "github.com/sfomuseum/go-libraryofcongress-database/sqlite"
 	"github.com/sfomuseum/go-libraryofcongress-database/sqlite/tables"
-	"io"
+	loc_timings "github.com/sfomuseum/go-libraryofcongress-database/timings"
 	"log"
 	"os"
-	"path/filepath"
+	"time"
 )
 
 func main() {
@@ -21,8 +20,8 @@ func main() {
 	dsn := flag.String("dsn", "libraryofcongress.db", "The SQLite DSN for the database you want to create.")
 
 	lcsh_data := flag.String("lcsh-data", "", "The path to your LCSH CSV data.")
-	lcnaf_data := flag.String("lcnaf-data", "", "The path to your LCNAF CSV data.")	
-	
+	lcnaf_data := flag.String("lcnaf-data", "", "The path to your LCNAF CSV data.")
+
 	flag.Parse()
 
 	ctx := context.Background()
@@ -51,83 +50,35 @@ func main() {
 
 	//
 
-	data_sources := make(map[string]io.Reader)
 	data_paths := make(map[string]string)
 
 	if *lcsh_data != "" {
-		data_paths["lcsh"] =  *lcsh_data
+		data_paths["lcsh"] = *lcsh_data
 	}
-	
-	if *lcnaf_data != "" {		
+
+	if *lcnaf_data != "" {
 		data_paths["lcnaf"] = *lcnaf_data
 	}
 
-	for source, path := range data_paths {
-
-		r, err := os.Open(path)
-
-		if err != nil {
-			log.Fatalf("Failed to open %s, %v", path, err)
-		}
-
-		defer r.Close()
-
-		ext := filepath.Ext(path)
-
-		switch ext {
-		case ".bz2":
-			 data_sources[source] = bzip2.NewReader(r)
-		default:
-			data_sources[source] = r
-		}		
-	}
-
-	//
-
-	for source, r := range data_sources {
-
-		err := index(ctx, source, sqlite_db, tables, r)
-
-		if err != nil {
-			log.Fatalf("Failed to index %s, %v", source, err)
-		}
-
-		log.Printf("Finished indexing %s\n", data_paths[source])
-	}
-
-}
-
-func index(ctx context.Context, source string, db sqlite.Database, tables []sqlite.Table, r io.Reader) error {
-
-	csv_r, err := csvdict.NewReader(r)
+	data_sources, err := loc_database.SourcesFromPaths(ctx, data_paths)
 
 	if err != nil {
-		return fmt.Errorf("Failed to create CSV reader for %s, %w", source, err)
+		log.Fatalf("Failed to derive database sources from paths, %v", err)
 	}
 
-	for {
-		row, err := csv_r.Read()
+	d := time.Second * 60
+	monitor, err := loc_timings.NewMonitor(ctx, d)
 
-		if err == io.EOF {
-			break
-		}
-
-		if err != nil {
-			return err
-		}
-
-		row["source"] = source
-
-		for _, t := range tables {
-
-			err := t.IndexRecord(ctx, db, row)
-
-			if err != nil {
-				return fmt.Errorf("Failed to index %v in table %s, %w", row, t.Name(), err)
-			}
-		}
-
+	if err != nil {
+		log.Fatalf("Failed to create timings monitor, %v", err)
 	}
 
-	return nil
+	monitor.Start(ctx, os.Stdout)
+	defer monitor.Stop(ctx)
+	
+	err = loc_sqlite.Index(ctx, data_sources, sqlite_db, tables, monitor)
+
+	if err != nil {
+		log.Fatalf("Failed to index sources, %v", err)
+	}
 }
