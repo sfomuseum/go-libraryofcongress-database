@@ -75,7 +75,7 @@ func main() {
 
 	monitor.Start(ctx, os.Stdout)
 	defer monitor.Stop(ctx)
-	
+
 	err = loc_sqlite.Index(ctx, data_sources, sqlite_db, tables, monitor)
 
 	if err != nil {

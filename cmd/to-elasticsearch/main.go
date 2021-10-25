@@ -10,7 +10,7 @@ import (
 	"github.com/elastic/go-elasticsearch/v7/esutil"
 	loc_database "github.com/sfomuseum/go-libraryofcongress-database"
 	loc_elasticsearch "github.com/sfomuseum/go-libraryofcongress-database/elasticsearch"
-	"github.com/sfomuseum/go-timings"	
+	"github.com/sfomuseum/go-timings"
 	"log"
 	"os"
 	"time"
@@ -99,7 +99,7 @@ func main() {
 
 	monitor.Start(ctx, os.Stdout)
 	defer monitor.Stop(ctx)
-	
+
 	err = loc_elasticsearch.Index(ctx, data_sources, bi, monitor)
 
 	if err != nil {

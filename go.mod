@@ -13,6 +13,7 @@ require (
 	github.com/aaronland/go-pagination-sql v0.0.4
 	github.com/aaronland/go-roster v0.0.2
 	github.com/aaronland/go-sqlite v0.1.0
+	github.com/blevesearch/bleve v1.0.14
 	github.com/cenkalti/backoff/v4 v4.1.1
 	github.com/elastic/go-elasticsearch/v7 v7.13.1
 	github.com/mattn/go-sqlite3 v1.14.8

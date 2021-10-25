@@ -1,3 +1,5 @@
+# github.com/RoaringBitmap/roaring v0.4.23
+github.com/RoaringBitmap/roaring
 # github.com/aaronland/go-http-bootstrap v0.1.0
 ## explicit
 github.com/aaronland/go-http-bootstrap
@@ -30,9 +32,70 @@ github.com/aws/aws-lambda-go/lambda
 github.com/aws/aws-lambda-go/lambda/handlertrace
 github.com/aws/aws-lambda-go/lambda/messages
 github.com/aws/aws-lambda-go/lambdacontext
+# github.com/blevesearch/bleve v1.0.14
+## explicit
+github.com/blevesearch/bleve
+github.com/blevesearch/bleve/analysis
+github.com/blevesearch/bleve/analysis/analyzer/standard
+github.com/blevesearch/bleve/analysis/datetime/flexible
+github.com/blevesearch/bleve/analysis/datetime/optional
+github.com/blevesearch/bleve/analysis/lang/en
+github.com/blevesearch/bleve/analysis/token/lowercase
+github.com/blevesearch/bleve/analysis/token/porter
+github.com/blevesearch/bleve/analysis/token/stop
+github.com/blevesearch/bleve/analysis/tokenizer/unicode
+github.com/blevesearch/bleve/document
+github.com/blevesearch/bleve/geo
+github.com/blevesearch/bleve/index
+github.com/blevesearch/bleve/index/scorch
+github.com/blevesearch/bleve/index/scorch/mergeplan
+github.com/blevesearch/bleve/index/scorch/segment
+github.com/blevesearch/bleve/index/store
+github.com/blevesearch/bleve/index/store/boltdb
+github.com/blevesearch/bleve/index/store/gtreap
+github.com/blevesearch/bleve/index/upsidedown
+github.com/blevesearch/bleve/mapping
+github.com/blevesearch/bleve/numeric
+github.com/blevesearch/bleve/registry
+github.com/blevesearch/bleve/search
+github.com/blevesearch/bleve/search/collector
+github.com/blevesearch/bleve/search/facet
+github.com/blevesearch/bleve/search/highlight
+github.com/blevesearch/bleve/search/highlight/format/html
+github.com/blevesearch/bleve/search/highlight/fragmenter/simple
+github.com/blevesearch/bleve/search/highlight/highlighter/html
+github.com/blevesearch/bleve/search/highlight/highlighter/simple
+github.com/blevesearch/bleve/search/query
+github.com/blevesearch/bleve/search/scorer
+github.com/blevesearch/bleve/search/searcher
+github.com/blevesearch/bleve/size
+# github.com/blevesearch/go-porterstemmer v1.0.3
+github.com/blevesearch/go-porterstemmer
+# github.com/blevesearch/mmap-go v1.0.2
+github.com/blevesearch/mmap-go
+# github.com/blevesearch/segment v0.9.0
+github.com/blevesearch/segment
+# github.com/blevesearch/snowballstem v0.9.0
+github.com/blevesearch/snowballstem
+github.com/blevesearch/snowballstem/english
+# github.com/blevesearch/zap/v11 v11.0.14
+github.com/blevesearch/zap/v11
+# github.com/blevesearch/zap/v12 v12.0.14
+github.com/blevesearch/zap/v12
+# github.com/blevesearch/zap/v13 v13.0.6
+github.com/blevesearch/zap/v13
+# github.com/blevesearch/zap/v14 v14.0.5
+github.com/blevesearch/zap/v14
+# github.com/blevesearch/zap/v15 v15.0.3
+github.com/blevesearch/zap/v15
 # github.com/cenkalti/backoff/v4 v4.1.1
 ## explicit
 github.com/cenkalti/backoff/v4
+# github.com/couchbase/vellum v1.0.2
+github.com/couchbase/vellum
+github.com/couchbase/vellum/levenshtein
+github.com/couchbase/vellum/regexp
+github.com/couchbase/vellum/utf8
 # github.com/elastic/go-elasticsearch/v7 v7.13.1
 ## explicit
 github.com/elastic/go-elasticsearch/v7
@@ -40,9 +103,19 @@ github.com/elastic/go-elasticsearch/v7/esapi
 github.com/elastic/go-elasticsearch/v7/estransport
 github.com/elastic/go-elasticsearch/v7/esutil
 github.com/elastic/go-elasticsearch/v7/internal/version
+# github.com/glycerine/go-unsnap-stream v0.0.0-20181221182339-f9677308dec2
+github.com/glycerine/go-unsnap-stream
+# github.com/golang/protobuf v1.3.2
+github.com/golang/protobuf/proto
+# github.com/golang/snappy v0.0.1
+github.com/golang/snappy
 # github.com/mattn/go-sqlite3 v1.14.8
 ## explicit
 github.com/mattn/go-sqlite3
+# github.com/mschoch/smat v0.2.0
+github.com/mschoch/smat
+# github.com/philhofer/fwd v1.0.0
+github.com/philhofer/fwd
 # github.com/sfomuseum/go-csvdict v0.0.1
 ## explicit
 github.com/sfomuseum/go-csvdict
@@ -52,10 +125,22 @@ github.com/sfomuseum/go-flags/flagset
 # github.com/sfomuseum/go-timings v0.0.1
 ## explicit
 github.com/sfomuseum/go-timings
+# github.com/steveyen/gtreap v0.1.0
+github.com/steveyen/gtreap
+# github.com/tinylib/msgp v1.1.0
+github.com/tinylib/msgp/msgp
 # github.com/whosonfirst/algnhsa v0.1.0
 github.com/whosonfirst/algnhsa
 # github.com/whosonfirst/go-sanitize v0.1.0
 github.com/whosonfirst/go-sanitize
+# github.com/willf/bitset v1.1.10
+github.com/willf/bitset
+# go.etcd.io/bbolt v1.3.5
+go.etcd.io/bbolt
 # golang.org/x/net v0.0.0-20201002202402-0a1ea396d57c
 golang.org/x/net/html
 golang.org/x/net/html/atom
+# golang.org/x/sys v0.0.0-20200930185726-fdedc70b468f
+golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/unix
+golang.org/x/sys/windows
