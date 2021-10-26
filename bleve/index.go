@@ -29,6 +29,8 @@ func index(ctx context.Context, src *loc_database.Source, bl_index bleve.Index, 
 
 	cb := func(ctx context.Context, row map[string]string) error {
 
+		// https://blevesearch.com/docs/Index-Mapping/
+		
 		log.Println("INDEX ", row)
 		go monitor.Signal(ctx)
 
