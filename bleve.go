@@ -7,6 +7,7 @@ import (
 	"github.com/blevesearch/bleve"
 	"log"
 	"net/url"
+	"os"
 )
 
 type BleveDatabase struct {
@@ -29,12 +30,27 @@ func NewBleveDatabase(ctx context.Context, uri string) (LibraryOfCongressDatabas
 
 	path := u.Path
 
-	mapping := bleve.NewIndexMapping()
+	_, err = os.Stat(path)
 
-	index, err := bleve.New(path, mapping)
+	var index bleve.Index
 
 	if err != nil {
-		log.Fatalf("Failed to create Bleve index, %w", err)
+
+		mapping := bleve.NewIndexMapping()
+
+		index, err = bleve.New(path, mapping)
+
+		if err != nil {
+			log.Fatalf("Failed to create Bleve index, %w", err)
+		}
+
+	} else {
+
+		index, err = bleve.Open(path)
+
+		if err != nil {
+			log.Fatalf("Failed to open Bleve index, %w", err)
+		}
 	}
 
 	bleve_db := &BleveDatabase{
@@ -60,7 +76,11 @@ func (bleve_db *BleveDatabase) Query(ctx context.Context, q string, pg_opts pagi
 
 	// https://pkg.go.dev/github.com/blevesearch/bleve#SearchResult
 
-	log.Println(rsp)
+	log.Println(rsp.Total)
+	log.Println(len(rsp.Hits))
+	for _, d := range rsp.Hits {
+		log.Println(d)
+	}
 
 	return nil, nil, fmt.Errorf("Not implemented")
 }
