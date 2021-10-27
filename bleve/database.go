@@ -46,8 +46,9 @@ func NewBleveDatabase(ctx context.Context, uri string) (database.LibraryOfCongre
 func (bleve_db *BleveDatabase) Query(ctx context.Context, q string, pg_opts pagination.PaginationOptions) ([]*database.QueryResult, pagination.Pagination, error) {
 
 	size := int(pg_opts.PerPage())
-	from := int(pg_opts.PerPage() * pg_opts.PerPage())
+	from := int(pg_opts.PerPage() * (pg_opts.Page() - 1))
 
+	log.Println(from, size)
 	query := bleve.NewQueryStringQuery(q)
 	req := bleve.NewSearchRequestOptions(query, size, from, false)
 
@@ -59,6 +60,7 @@ func (bleve_db *BleveDatabase) Query(ctx context.Context, q string, pg_opts pagi
 
 	// https://pkg.go.dev/github.com/blevesearch/bleve#SearchResult
 
+	log.Println(rsp)
 	log.Println(rsp.Total)
 	log.Println(len(rsp.Hits))
 	for _, d := range rsp.Hits {

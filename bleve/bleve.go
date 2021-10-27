@@ -12,6 +12,10 @@ type Doc struct {
 	Label string
 }
 
+func (d *Doc) String() string {
+	return fmt.Sprintf("%s %s", d.Id, d.Label)
+}
+
 func NewBleveIndex(ctx context.Context, uri string) (bleve.Index, error) {
 
 	var index bleve.Index

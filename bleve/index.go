@@ -42,6 +42,7 @@ func index(ctx context.Context, src *loc_database.Source, bl_index bleve.Index, 
 			return fmt.Errorf("Failed to index row, %w", err)
 		}
 
+		// log.Println(doc)
 		go monitor.Signal(ctx)
 
 		return nil
