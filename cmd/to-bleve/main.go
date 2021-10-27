@@ -25,7 +25,7 @@ func main() {
 
 	//
 
-	index, err := loc_database.NewBleveIndex(ctx, *path_index)
+	index, err := loc_bleve.NewBleveIndex(ctx, *path_index)
 
 	if err != nil {
 		log.Fatalf("Failed to load Bleve index, %w", err)

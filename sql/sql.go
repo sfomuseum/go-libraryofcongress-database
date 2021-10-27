@@ -1,4 +1,4 @@
-package database
+package sql
 
 import (
 	"context"
@@ -6,20 +6,21 @@ import (
 	"fmt"
 	"github.com/aaronland/go-pagination"
 	pg_sql "github.com/aaronland/go-pagination-sql"
+	"github.com/sfomuseum/go-libraryofcongress-database"
 	"net/url"
 )
 
 type SQLDatabase struct {
-	LibraryOfCongressDatabase
+	database.LibraryOfCongressDatabase
 	db *sql.DB
 }
 
 func init() {
 	ctx := context.Background()
-	RegisterLibraryOfCongressDatabase(ctx, "sql", NewSQLDatabase)
+	database.RegisterLibraryOfCongressDatabase(ctx, "sql", NewSQLDatabase)
 }
 
-func NewSQLDatabase(ctx context.Context, uri string) (LibraryOfCongressDatabase, error) {
+func NewSQLDatabase(ctx context.Context, uri string) (database.LibraryOfCongressDatabase, error) {
 
 	u, err := url.Parse(uri)
 
@@ -52,7 +53,7 @@ func NewSQLDatabase(ctx context.Context, uri string) (LibraryOfCongressDatabase,
 	return sql_q, nil
 }
 
-func (sql_q *SQLDatabase) Query(ctx context.Context, q string, pg_opts pagination.PaginationOptions) ([]*QueryResult, pagination.Pagination, error) {
+func (sql_q *SQLDatabase) Query(ctx context.Context, q string, pg_opts pagination.PaginationOptions) ([]*database.QueryResult, pagination.Pagination, error) {
 
 	query_str := "SELECT id, label, source FROM search WHERE label MATCH ?  OR id MATCH ? ORDER BY label"
 
@@ -62,7 +63,7 @@ func (sql_q *SQLDatabase) Query(ctx context.Context, q string, pg_opts paginatio
 		return nil, nil, fmt.Errorf("Failed to query, %w", err)
 	}
 
-	results := make([]*QueryResult, 0)
+	results := make([]*database.QueryResult, 0)
 
 	rows := pg_rsp.Rows()
 	pagination := pg_rsp.Pagination()
@@ -81,7 +82,7 @@ func (sql_q *SQLDatabase) Query(ctx context.Context, q string, pg_opts paginatio
 			return nil, nil, fmt.Errorf("Failed to scan row, %w", err)
 		}
 
-		r := &QueryResult{
+		r := &database.QueryResult{
 			Id:     id,
 			Label:  label,
 			Source: source,
