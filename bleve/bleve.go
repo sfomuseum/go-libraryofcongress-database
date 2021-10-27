@@ -8,12 +8,13 @@ import (
 )
 
 type Doc struct {
-	Id    string
-	Label string
+	Id     string `json:"id"`
+	Label  string `json:"label"`
+	Source string `json:"source"`
 }
 
 func (d *Doc) String() string {
-	return fmt.Sprintf("%s %s", d.Id, d.Label)
+	return fmt.Sprintf("%s:%s %s", d.Source, d.Id, d.Label)
 }
 
 func NewBleveIndex(ctx context.Context, uri string) (bleve.Index, error) {
@@ -26,13 +27,17 @@ func NewBleveIndex(ctx context.Context, uri string) (bleve.Index, error) {
 
 		mapping := bleve.NewIndexMapping()
 
-		locMapping := bleve.NewDocumentMapping()
-		mapping.AddDocumentMapping("loc", locMapping)
+		docMapping := bleve.NewDocumentMapping()
+		mapping.AddDocumentMapping("doc", docMapping)
 
 		labelFieldMapping := bleve.NewTextFieldMapping()
 		labelFieldMapping.Store = true
 
-		locMapping.AddFieldMappingsAt("label", labelFieldMapping)
+		sourceFieldMapping := bleve.NewTextFieldMapping()
+		sourceFieldMapping.Store = true
+
+		docMapping.AddFieldMappingsAt("label", labelFieldMapping)
+		docMapping.AddFieldMappingsAt("source", sourceFieldMapping)
 
 		i, err := bleve.New(uri, mapping)
 

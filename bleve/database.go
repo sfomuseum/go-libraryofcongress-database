@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/aaronland/go-pagination"
+	"github.com/aaronland/go-pagination/countable"
 	"github.com/blevesearch/bleve"
 	"github.com/sfomuseum/go-libraryofcongress-database"
 	"log"
@@ -45,12 +46,19 @@ func NewBleveDatabase(ctx context.Context, uri string) (database.LibraryOfCongre
 
 func (bleve_db *BleveDatabase) Query(ctx context.Context, q string, pg_opts pagination.PaginationOptions) ([]*database.QueryResult, pagination.Pagination, error) {
 
-	size := int(pg_opts.PerPage())
-	from := int(pg_opts.PerPage() * (pg_opts.Page() - 1))
+	page := pg_opts.Page()
+	per_page := pg_opts.PerPage()
 
-	log.Println(from, size)
+	size := int(per_page)
+	from := int(per_page * (page - 1))
+
 	query := bleve.NewQueryStringQuery(q)
 	req := bleve.NewSearchRequestOptions(query, size, from, false)
+
+	req.Fields = []string{
+		"label",
+		"source",
+	}
 
 	rsp, err := bleve_db.index.Search(req)
 
@@ -58,14 +66,32 @@ func (bleve_db *BleveDatabase) Query(ctx context.Context, q string, pg_opts pagi
 		return nil, nil, fmt.Errorf("Failed to perform query, %w", err)
 	}
 
-	// https://pkg.go.dev/github.com/blevesearch/bleve#SearchResult
+	results := make([]*database.QueryResult, 0)
 
-	log.Println(rsp)
-	log.Println(rsp.Total)
-	log.Println(len(rsp.Hits))
 	for _, d := range rsp.Hits {
-		log.Println(d)
+
+		id := d.ID
+		fields := d.Fields
+
+		log.Println(fields)
+
+		r := &database.QueryResult{
+			Id:     id,
+			Label:  fields["label"].(string),
+			Source: fields["source"].(string),
+		}
+
+		log.Println(r)
+		results = append(results, r)
 	}
 
-	return nil, nil, fmt.Errorf("Not implemented")
+	total := int64(rsp.Total)
+
+	pg, err := countable.NewPaginationFromCountWithOptions(pg_opts, total)
+
+	if err != nil {
+		return nil, nil, fmt.Errorf("Failed to derive pagination, %w", err)
+	}
+
+	return results, pg, nil
 }

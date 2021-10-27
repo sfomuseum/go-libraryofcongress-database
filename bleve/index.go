@@ -32,8 +32,9 @@ func index(ctx context.Context, src *loc_database.Source, bl_index bleve.Index, 
 		// https://blevesearch.com/docs/Index-Mapping/
 
 		doc := &Doc{
-			Id:    row["id"],
-			Label: row["label"],
+			Id:     row["id"],
+			Label:  row["label"],
+			Source: src.Label,
 		}
 
 		err := bl_index.Index(row["id"], doc)
