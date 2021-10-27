@@ -20,6 +20,46 @@ func init() {
 	RegisterLibraryOfCongressDatabase(ctx, "bleve", NewBleveDatabase)
 }
 
+func NewBleveIndex(ctx context.Context, uri string) (bleve.Index, error) {
+
+	var index bleve.Index
+
+	_, err := os.Stat(uri)
+
+	if err != nil {
+
+		mapping := bleve.NewIndexMapping()
+
+		locMapping := bleve.NewDocumentMapping()
+		mapping.AddDocumentMapping("loc", locMapping)
+
+		labelFieldMapping := bleve.NewTextFieldMapping()
+		labelFieldMapping.Store = true
+
+		locMapping.AddFieldMappingsAt("label", labelFieldMapping)
+
+		i, err := bleve.New(uri, mapping)
+
+		if err != nil {
+			return nil, fmt.Errorf("Failed to create new index, %v", err)
+		}
+
+		index = i
+
+	} else {
+
+		i, err := bleve.Open(uri)
+
+		if err != nil {
+			return nil, fmt.Errorf("Failed to open Bleve index, %w", err)
+		}
+
+		index = i
+	}
+
+	return index, nil
+}
+
 func NewBleveDatabase(ctx context.Context, uri string) (LibraryOfCongressDatabase, error) {
 
 	u, err := url.Parse(uri)
@@ -30,27 +70,10 @@ func NewBleveDatabase(ctx context.Context, uri string) (LibraryOfCongressDatabas
 
 	path := u.Path
 
-	_, err = os.Stat(path)
-
-	var index bleve.Index
+	index, err := NewBleveIndex(ctx, path)
 
 	if err != nil {
-
-		mapping := bleve.NewIndexMapping()
-
-		index, err = bleve.New(path, mapping)
-
-		if err != nil {
-			log.Fatalf("Failed to create Bleve index, %w", err)
-		}
-
-	} else {
-
-		index, err = bleve.Open(path)
-
-		if err != nil {
-			log.Fatalf("Failed to open Bleve index, %w", err)
-		}
+		log.Fatalf("Failed to load Bleve index, %w", err)
 	}
 
 	bleve_db := &BleveDatabase{

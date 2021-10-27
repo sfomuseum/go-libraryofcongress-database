@@ -4,7 +4,6 @@ import (
 	"context"
 	_ "database/sql"
 	"flag"
-	"github.com/blevesearch/bleve"
 	loc_database "github.com/sfomuseum/go-libraryofcongress-database"
 	loc_bleve "github.com/sfomuseum/go-libraryofcongress-database/bleve"
 	"github.com/sfomuseum/go-timings"
@@ -26,20 +25,10 @@ func main() {
 
 	//
 
-	mapping := bleve.NewIndexMapping()
-
-	locMapping := bleve.NewDocumentMapping()
-	mapping.AddDocumentMapping("loc", locMapping)
-
-	labelFieldMapping := bleve.NewTextFieldMapping()
-	labelFieldMapping.Store = true
-
-	locMapping.AddFieldMappingsAt("label", labelFieldMapping)
-
-	index, err := bleve.New(*path_index, mapping)
+	index, err := loc_database.NewBleveIndex(ctx, *path_index)
 
 	if err != nil {
-		log.Fatalf("Failed to create new index, %v", err)
+		log.Fatalf("Failed to load Bleve index, %w", err)
 	}
 
 	//
