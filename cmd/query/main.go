@@ -3,11 +3,13 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"github.com/aaronland/go-pagination/countable"
 	"github.com/sfomuseum/go-libraryofcongress-database"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/bleve"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/sql"
 	"log"
+	"strings"
 )
 
 func main() {
@@ -30,8 +32,20 @@ func main() {
 		log.Fatalf("Failed to create pagination options, %v", err)
 	}
 
-	for _, q := range flag.Args() {
-		db.Query(ctx, q, pg_opts)
+	cb := func(ctx context.Context, results []*database.QueryResult) error {
+
+		for _, r := range results {
+			fmt.Println(r)
+		}
+
+		return nil
 	}
 
+	q := strings.Join(flag.Args(), " ")
+
+	err = database.QueryPaginated(ctx, db, q, pg_opts, cb)
+
+	if err != nil {
+		log.Fatalf("Failed to query for '%s', %v", q, err)
+	}
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/aaronland/go-pagination/countable"
 	"github.com/blevesearch/bleve"
 	"github.com/sfomuseum/go-libraryofcongress-database"
-	"log"
+	_ "log"
 	"net/url"
 )
 
@@ -34,7 +34,7 @@ func NewBleveDatabase(ctx context.Context, uri string) (database.LibraryOfCongre
 	index, err := NewBleveIndex(ctx, path)
 
 	if err != nil {
-		log.Fatalf("Failed to load Bleve index, %w", err)
+		return nil, fmt.Errorf("Failed to load Bleve index, %w", err)
 	}
 
 	bleve_db := &BleveDatabase{
@@ -73,15 +73,12 @@ func (bleve_db *BleveDatabase) Query(ctx context.Context, q string, pg_opts pagi
 		id := d.ID
 		fields := d.Fields
 
-		log.Println(fields)
-
 		r := &database.QueryResult{
 			Id:     id,
 			Label:  fields["label"].(string),
 			Source: fields["source"].(string),
 		}
 
-		log.Println(r)
 		results = append(results, r)
 	}
 
