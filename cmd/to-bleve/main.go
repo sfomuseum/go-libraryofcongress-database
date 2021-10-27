@@ -24,7 +24,18 @@ func main() {
 
 	ctx := context.Background()
 
+	//
+
 	mapping := bleve.NewIndexMapping()
+
+	locMapping := bleve.NewDocumentMapping()
+	mapping.AddDocumentMapping("loc", locMapping)
+
+	labelFieldMapping := bleve.NewTextFieldMapping()
+	labelFieldMapping.Store = true
+
+	locMapping.AddFieldMappingsAt("label", labelFieldMapping)
+
 	index, err := bleve.New(*path_index, mapping)
 
 	if err != nil {
