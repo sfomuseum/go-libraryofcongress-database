@@ -11,6 +11,7 @@ import (
 )
 
 type LibraryOfCongressDatabase interface {
+	Index(context.Context, []Source, timings.Monitor) error 
 	Query(context.Context, string, pagination.PaginationOptions) ([]*QueryResult, pagination.Pagination, error)
 }
 

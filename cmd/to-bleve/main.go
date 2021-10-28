@@ -24,8 +24,9 @@ func main() {
 
 	ctx := context.Background()
 
-	index, err := loc_bleve.NewBleveIndex(ctx, *path_index)
-
+	database_uri := fmt.Sprintf("bleve://%s", *path_index)
+	db, err := loc_database.NewDatabase(ctx, database_uri)
+	
 	if err != nil {
 		log.Fatalf("Failed to load Bleve index, %w", err)
 	}
@@ -56,7 +57,7 @@ func main() {
 	monitor.Start(ctx, os.Stdout)
 	defer monitor.Stop(ctx)
 
-	err = loc_bleve.Index(ctx, data_sources, index, monitor)
+	err = db.Index(ctx, data_sources, monitor)
 
 	if err != nil {
 		log.Fatalf("Failed to index sources, %v", err)

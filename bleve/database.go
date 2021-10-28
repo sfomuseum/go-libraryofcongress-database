@@ -7,6 +7,7 @@ import (
 	"github.com/aaronland/go-pagination/countable"
 	"github.com/blevesearch/bleve"
 	"github.com/sfomuseum/go-libraryofcongress-database"
+	"github.com/sfomuseum/go-timings"	
 	_ "log"
 	"net/url"
 )
@@ -42,6 +43,47 @@ func NewBleveDatabase(ctx context.Context, uri string) (database.LibraryOfCongre
 	}
 
 	return bleve_db, nil
+}
+
+func (bleve_db *BleveDatabase) Index(ctx context.Context, sources []*database.Source, bl_index bleve.Index, monitor timings.Monitor) error {
+
+	for _, src := range sources {
+
+		err := bleve_db.indexSource(ctx, src, monitor)
+
+		if err != nil {
+			return fmt.Errorf("Failed to index %s, %v", src.Label, err)
+		}
+	}
+
+	return nil
+}
+
+func (bleve_db *BleveDatabase) indexSource(ctx context.Context, src *database.Source, bl_index bleve.Index, monitor timings.Monitor) error {
+
+	cb := func(ctx context.Context, row map[string]string) error {
+
+		// https://blevesearch.com/docs/Index-Mapping/
+
+		doc := &Doc{
+			Id:     row["id"],
+			Label:  row["label"],
+			Source: src.Label,
+		}
+
+		err := bleve_db.index.Index(row["id"], doc)
+
+		if err != nil {
+			return fmt.Errorf("Failed to index row, %w", err)
+		}
+
+		// log.Println(doc)
+		go monitor.Signal(ctx)
+
+		return nil
+	}
+
+	return src.Index(ctx, cb)
 }
 
 func (bleve_db *BleveDatabase) Query(ctx context.Context, q string, pg_opts pagination.PaginationOptions) ([]*database.QueryResult, pagination.Pagination, error) {
