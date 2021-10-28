@@ -1,3 +1,4 @@
+// The `to-bleve` tool will index CSV data produced by the tools in `sfomuseum/go-libraryofcongress` in an Bleve index.
 package main
 
 import (
@@ -23,15 +24,11 @@ func main() {
 
 	ctx := context.Background()
 
-	//
-
 	index, err := loc_bleve.NewBleveIndex(ctx, *path_index)
 
 	if err != nil {
 		log.Fatalf("Failed to load Bleve index, %w", err)
 	}
-
-	//
 
 	data_paths := make(map[string]string)
 
