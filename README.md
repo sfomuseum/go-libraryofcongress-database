@@ -186,7 +186,7 @@ Usage of ./bin/to-sqlite:
 
 ## Important
 
-This works. But it is very slow to index data. For example, here are some timings from an attempt to index both the Library of Congress subject headings and name authority file in a single SQLite database:
+This works, but it is very slow to index data. For example, here are some timings from an attempt to index both the Library of Congress subject headings and name authority file in a single SQLite database:
 
 ```
 processed 253390 records in 4h13m0.03018635s (started 2021-10-19 17:58:06.533669374 +0000 UTC m=+0.002113478)
