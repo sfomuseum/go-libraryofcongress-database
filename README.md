@@ -102,6 +102,8 @@ $> curl -s 'http://localhost:8080/api/query?q=SQL' | jq
 
 ### query
 
+The `query` tool is a command-line application to perform fulltext queries against a database generated using data produced by the tools in `sfomuseum/go-libraryofcongress` package.
+
 ```
 $> ./bin/query -database-uri bleve:///usr/local/data/libraryofcongress.db Montreal
 lcsh:sh85087079 Montreal River (Ont.)
