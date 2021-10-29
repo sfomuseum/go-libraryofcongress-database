@@ -26,7 +26,57 @@ A sample SQLite database for Library of Congress subject headings is currently i
 
 ## Databases
 
-_To be written_
+_TBW_
+
+### Bleve
+
+* https://blevesearch.com/
+
+### Elasticsearch
+
+* https://www.elastic.co/elastic-stack/
+
+### SQlite
+
+* https://sqlite.org/
+
+## Database URIs
+
+### bleve
+
+```
+bleve://{PATH_TO_DATABASE}
+```
+
+For example:
+
+```
+bleve:///usr/local/data/loc.db
+```
+
+### elasticsearch
+
+```
+elasticsearch://?endpoint={ELASTICSEARCH_INDEX}&index={ELASTICSEARCH_INDEX}
+```
+
+For example:
+
+```
+elasticsearch://?endpoint=http://localhost:9200&index=loc
+```
+
+### sqlite
+
+```
+sql://{ENGINE}?dsn={SQLITE_DSN}
+```
+
+For example:
+
+```
+sql://sqlite3?dsn=/usr/local/data/loc.db
+```
 
 ## Tools
 
