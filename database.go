@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"github.com/aaronland/go-pagination"
 	"github.com/aaronland/go-roster"
+	"github.com/sfomuseum/go-timings"
 	"net/url"
 	"sort"
 	"strings"
 )
 
 type LibraryOfCongressDatabase interface {
-	Index(context.Context, []Source, timings.Monitor) error 
+	Index(context.Context, []*Source, timings.Monitor) error
 	Query(context.Context, string, pagination.PaginationOptions) ([]*QueryResult, pagination.Pagination, error)
 }
 

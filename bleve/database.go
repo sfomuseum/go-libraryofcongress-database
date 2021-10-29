@@ -7,7 +7,7 @@ import (
 	"github.com/aaronland/go-pagination/countable"
 	"github.com/blevesearch/bleve"
 	"github.com/sfomuseum/go-libraryofcongress-database"
-	"github.com/sfomuseum/go-timings"	
+	"github.com/sfomuseum/go-timings"
 	_ "log"
 	"net/url"
 )
@@ -45,7 +45,7 @@ func NewBleveDatabase(ctx context.Context, uri string) (database.LibraryOfCongre
 	return bleve_db, nil
 }
 
-func (bleve_db *BleveDatabase) Index(ctx context.Context, sources []*database.Source, bl_index bleve.Index, monitor timings.Monitor) error {
+func (bleve_db *BleveDatabase) Index(ctx context.Context, sources []*database.Source, monitor timings.Monitor) error {
 
 	for _, src := range sources {
 
@@ -59,7 +59,7 @@ func (bleve_db *BleveDatabase) Index(ctx context.Context, sources []*database.So
 	return nil
 }
 
-func (bleve_db *BleveDatabase) indexSource(ctx context.Context, src *database.Source, bl_index bleve.Index, monitor timings.Monitor) error {
+func (bleve_db *BleveDatabase) indexSource(ctx context.Context, src *database.Source, monitor timings.Monitor) error {
 
 	cb := func(ctx context.Context, row map[string]string) error {
 

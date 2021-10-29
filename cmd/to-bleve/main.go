@@ -5,8 +5,8 @@ import (
 	"context"
 	_ "database/sql"
 	"flag"
-	loc_database "github.com/sfomuseum/go-libraryofcongress-database"
-	loc_bleve "github.com/sfomuseum/go-libraryofcongress-database/bleve"
+	"fmt"
+	"github.com/sfomuseum/go-libraryofcongress-database"
 	"github.com/sfomuseum/go-timings"
 	"log"
 	"os"
@@ -25,8 +25,8 @@ func main() {
 	ctx := context.Background()
 
 	database_uri := fmt.Sprintf("bleve://%s", *path_index)
-	db, err := loc_database.NewDatabase(ctx, database_uri)
-	
+	db, err := database.NewLibraryOfCongressDatabase(ctx, database_uri)
+
 	if err != nil {
 		log.Fatalf("Failed to load Bleve index, %w", err)
 	}
@@ -41,7 +41,7 @@ func main() {
 		data_paths["lcnaf"] = *lcnaf_data
 	}
 
-	data_sources, err := loc_database.SourcesFromPaths(ctx, data_paths)
+	data_sources, err := database.SourcesFromPaths(ctx, data_paths)
 
 	if err != nil {
 		log.Fatalf("Failed to derive database sources from paths, %v", err)
