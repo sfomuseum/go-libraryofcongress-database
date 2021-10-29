@@ -7,7 +7,7 @@ COPY . /build/go-libraryofcongress-database
 RUN apk update && apk upgrade \
     && apk add make libc-dev gcc git \
     && cd /build/go-libraryofcongress-database \
-    && go build -mod vendor -o /usr/local/bin/libraryofcongress-server cmd/server/main.go    
+    && go build -mod vendor --tags fts5 -o /usr/local/bin/libraryofcongress-server cmd/server/main.go    
 
 FROM alpine:latest
 
