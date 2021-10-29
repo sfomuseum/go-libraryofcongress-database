@@ -3,10 +3,12 @@ package main
 
 import (
 	"context"
-	_ "database/sql"
 	"flag"
-	"fmt"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/sfomuseum/go-libraryofcongress-database"
+	_ "github.com/sfomuseum/go-libraryofcongress-database/bleve"
+	_ "github.com/sfomuseum/go-libraryofcongress-database/elasticsearch"
+	_ "github.com/sfomuseum/go-libraryofcongress-database/sql"
 	"github.com/sfomuseum/go-timings"
 	"log"
 	"os"
@@ -15,7 +17,7 @@ import (
 
 func main() {
 
-	path_index := flag.String("index", "libraryofcongress.db", "The path to the Bleve index you want to create.")
+	database_uri := flag.String("database-uri", "", "...")
 
 	lcsh_data := flag.String("lcsh-data", "", "The path to your LCSH CSV data.")
 	lcnaf_data := flag.String("lcnaf-data", "", "The path to your LCNAF CSV data.")
@@ -24,11 +26,10 @@ func main() {
 
 	ctx := context.Background()
 
-	database_uri := fmt.Sprintf("bleve://%s", *path_index)
-	db, err := database.NewLibraryOfCongressDatabase(ctx, database_uri)
+	db, err := database.NewLibraryOfCongressDatabase(ctx, *database_uri)
 
 	if err != nil {
-		log.Fatalf("Failed to load Bleve index, %w", err)
+		log.Fatalf("Failed to create database, %w", err)
 	}
 
 	data_paths := make(map[string]string)
