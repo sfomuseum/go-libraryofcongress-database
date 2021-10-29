@@ -69,7 +69,7 @@ func NewSQLDatabase(ctx context.Context, uri string) (database.LibraryOfCongress
 	}
 
 	tables_sql := []string{
-		"CREATE VIRTUAL TABLE %s USING fts5(id, source, label)",
+		"CREATE VIRTUAL TABLE IF NOT EXISTS search USING fts5(id, source, label)",
 	}
 
 	for _, q := range tables_sql {
@@ -77,7 +77,7 @@ func NewSQLDatabase(ctx context.Context, uri string) (database.LibraryOfCongress
 		_, err = db.ExecContext(ctx, q)
 
 		if err != nil {
-			return nil, fmt.Errorf("Failed to execute tables SQL '%s', %v", q, err)
+			return nil, fmt.Errorf("Failed to execute tables SQL '%s', %w", q, err)
 		}
 	}
 
@@ -95,7 +95,7 @@ func (sql_db *SQLDatabase) Index(ctx context.Context, sources []*database.Source
 		err := sql_db.indexSource(ctx, src, monitor)
 
 		if err != nil {
-			return fmt.Errorf("Failed to index %s, %v", src.Label, err)
+			return fmt.Errorf("Failed to index %s, %w", src.Label, err)
 		}
 	}
 

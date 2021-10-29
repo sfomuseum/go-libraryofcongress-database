@@ -30,6 +30,41 @@ _To be written_
 
 ## Tools
 
+### index
+
+#### bleve
+
+```
+$> ./bin/index -database-uri bleve:///usr/local/data/libraryofcongress.db -lcsh-data /usr/local/data/lcsh.csv.bz2
+processed 5692 records in 1m0.001390571s (started 2021-10-27 15:52:35.790947 -0700 PDT m=+0.015128394)
+processed 11161 records in 2m0.001847245s (started 2021-10-27 15:52:35.790947 -0700 PDT m=+0.015128394)
+processed 16179 records in 3m0.000195064s (started 2021-10-27 15:52:35.790947 -0700 PDT m=+0.015128394)
+processed 20693 records in 4m0.003592035s (started 2021-10-27 15:52:35.790947 -0700 PDT m=+0.015128394)
+...time passes
+
+processed 438053 records in 2h3m0.000624126s (started 2021-10-27 15:52:35.790947 -0700 PDT m=+0.015128394)
+processed 441373 records in 2h4m0.002261248s (started 2021-10-27 15:52:35.790947 -0700 PDT m=+0.015128394)
+processed 444805 records in 2h5m0.002327734s (started 2021-10-27 15:52:35.790947 -0700 PDT m=+0.015128394)
+2021/10/27 17:58:09 Finished indexing lcsh
+
+$> du -h -d 1 /usr/local/data/libraryofcongress.db/
+761M	libraryofcongress.db/
+```
+
+#### elasticsearch
+
+_TBW_
+
+#### sqlite
+
+```
+$> time ./bin/index -database-uri 'sql://sqlite3?dsn=test.db' -lcsh-data ~/Desktop/lcsh.csv.bz2
+33.169u 15.511s 0:36.01 135.1%	0+0k 0+0io 0pf+0w
+
+$> du -h test.db 
+ 46M	test.db
+```
+
 ### server
 
 The `server` tool is a simple web interface providing humans and robots, both, the ability to query a database.
@@ -104,46 +139,7 @@ $> curl -s 'http://localhost:8080/api/query?q=SQL' | jq
 
 The `query` tool is a command-line application to perform fulltext queries against a database generated using data produced by the tools in `sfomuseum/go-libraryofcongress` package.
 
-```
-$> ./bin/query -database-uri bleve:///usr/local/data/libraryofcongress.db Montreal
-lcsh:sh85087079 Montreal River (Ont.)
-lcsh:sh2010014761 Alfa Romeo Montreal automobile
-lcsh:sh2017003022 Montreal Massacre, Montréal, Québec, 1989
-```
-
-### to-bleve
-
-The `to-bleve` tool will index CSV data produced by the tools in `sfomuseum/go-libraryofcongress` in an Bleve index.
-
-```
-> ./bin/to-bleve -h
-Usage of ./bin/to-bleve:
-  -index string
-    	The path to the Bleve index you want to create. (default "libraryofcongress.db")
-  -lcnaf-data string
-    	The path to your LCNAF CSV data.
-  -lcsh-data string
-    	The path to your LCSH CSV data.
-```
-
-```
-$> ./bin/to-bleve -index /usr/local/data/libraryofcongress.db -lcsh-data /usr/local/data/lcsh.csv.bz2
-processed 5692 records in 1m0.001390571s (started 2021-10-27 15:52:35.790947 -0700 PDT m=+0.015128394)
-processed 11161 records in 2m0.001847245s (started 2021-10-27 15:52:35.790947 -0700 PDT m=+0.015128394)
-processed 16179 records in 3m0.000195064s (started 2021-10-27 15:52:35.790947 -0700 PDT m=+0.015128394)
-processed 20693 records in 4m0.003592035s (started 2021-10-27 15:52:35.790947 -0700 PDT m=+0.015128394)
-...time passes
-
-processed 438053 records in 2h3m0.000624126s (started 2021-10-27 15:52:35.790947 -0700 PDT m=+0.015128394)
-processed 441373 records in 2h4m0.002261248s (started 2021-10-27 15:52:35.790947 -0700 PDT m=+0.015128394)
-processed 444805 records in 2h5m0.002327734s (started 2021-10-27 15:52:35.790947 -0700 PDT m=+0.015128394)
-2021/10/27 17:58:09 Finished indexing lcsh
-
-$> du -h -d 1 /usr/local/data/libraryofcongress.db/
-761M	libraryofcongress.db/
-```
-
-And then you can use the `query` tool (described above) to query the database:
+#### bleve
 
 ```
 $> ./bin/query -database-uri bleve:///usr/local/data/libraryofcongress.db Montreal
@@ -152,64 +148,43 @@ lcsh:sh2010014761 Alfa Romeo Montreal automobile
 lcsh:sh2017003022 Montreal Massacre, Montréal, Québec, 1989
 ```
 
-### to-elasticsearch
-
-The `to-elasticsearch` tool will index CSV data produced by the tools in `sfomuseum/go-libraryofcongress` in an Elasticsearch index.
+#### sqlite
 
 ```
-$> ./bin/to-elasticsearch -h /Users/asc/sfomuseum/go-libraryofcongress-database                                                    
-Usage of ./bin/to-elasticsearch:
-  -elasticsearch-endpoint string
-    	The Elasticsearch endpoint where data should be indexed. (default "http://localhost:9200")
-  -elasticsearch-index string
-    	The Elasticsearch index where data should be stored. (default "libraryofcongress")
-  -lcnaf-data string
-    	The path to your LCNAF CSV data.
-  -lcsh-data string
-    	The path to your LCSH CSV data.
-  -workers int
-    	The number of concurrent workers to use when indexing data. (default 10)
+$> ./bin/query -database-uri 'sql://sqlite3?dsn=test.db' Montreal
+lcsh:sh2010014761 Alfa Romeo Montreal automobile
+lcsh:sh94006536 Boulevard Saint-Laurent (Montréal, Québec)
+lcsh:sh2009118684 Central business districts--Québec (Province)--Montréal--Maps
+lcsh:sh2008002760 Fur Trade at Lachine National Historic Site (Montréal, Québec)
+lcsh:sh85073824 Lachine Canal (Montréal, Québec)
+lcsh:sh2008003685 Lachine Canal National Historic Site (Montréal, Québec)
+lcsh:sh2008002035 Louis-Joseph Papineau National Historic Site (Montréal, Québec)
+lcsh:sh86005383 Maison Saint-Gabriel (Montréal, Québec)
+lcsh:sh2008107459 Marriage records--Québec (Province)--Montréal
+lcsh:sh2017003022 Montreal Massacre, Montréal, Québec, 1989
+lcsh:sh85087079 Montreal River (Ont.)
+lcsh:sh2008115936 Montréal (Québec)--Biography
+lcsh:sh2008115937 Montréal (Québec)--Fiction
+lcsh:sh2008107460 Montréal (Québec)--Genealogy
+lcsh:sh2008115938 Montréal (Québec)--Guidebooks
+lcsh:sh95002319 Montréal (Québec)--History
+lcsh:sh95002320 Montréal (Québec)--History--Siege, 1775
+lcsh:sh85087078 Montréal Island (Québec : Island)
+lcsh:sh2007000305 Parc Belmont (Montréal, Québec)
+lcsh:sh2002003622 Parc Jarry (Montréal, Québec)
+lcsh:sh88006626 Parc Sohmer (Montréal, Québec)
+lcsh:sh2002003824 Parc du Mont-Royal (Montréal, Québec)
+lcsh:sh2005005587 Place Ville Marie (Montréal, Québec)
+lcsh:sh93002004 Place d'Armes (Montréal, Québec)
+lcsh:sh93002901 Pointe-à-Callière Site (Montréal, Québec)
+lcsh:sh94001599 Pont Victoria (Montréal, Québec)
+lcsh:sh2001005269 Poudrière (Montréal, Québec)
+lcsh:sh2015001674 Rue Sainte-Catherine (Montréal, Québec)
+lcsh:sh2005005292 Rue Sainte-Hélène (Montréal, Québec)
+lcsh:sh2007003084 Sherbrooke Street (Montréal, Québec)
+lcsh:sh2008002166 Sir George-Étienne Cartier National Historic Site (Montréal, Québec)
+lcsh:sh2002005306 Stock Exchange Tower (Montréal, Québec)
 ```
-
-### to-sqlite
-
-The `to-sqlite` tool will index CSV data produced by the tools in `sfomuseum/go-libraryofcongress` in a SQLite database.
-
-```
-$> ./bin/to-sqlite -h
-Usage of ./bin/to-sqlite:
-  -dsn string
-    	The SQLite DSN for the database you want to create. (default "libraryofcongress.db")
-  -lcnaf-data string
-    	The path to your LCNAF CSV data.
-  -lcsh-data string
-    	The path to your LCSH CSV data.
-```
-
-## Important
-
-This works, but it is very slow to index data. For example, here are some timings from an attempt to index both the Library of Congress subject headings and name authority file in a single SQLite database:
-
-```
-processed 253390 records in 4h13m0.03018635s (started 2021-10-19 17:58:06.533669374 +0000 UTC m=+0.002113478)
-```
-
-So it takes between 16-20  hours to index the Library of Congress subject headings. Here's what happens when the same database is used to index the Library of Congress Name Authority File as well:
-
-```
-processed 614560 records in 22h12m0.000038787s (started 2021-10-19 17:58:06.533669374 +0000 UTC m=+0.002113478)
-processed 713753 records in 29h52m0.028314524s (started 2021-10-19 17:58:06.533669374 +0000 UTC m=+0.002113478)
-processed 889205 records in 46h20m0.014818217s (started 2021-10-19 17:58:06.533669374 +0000 UTC m=+0.002113478)
-processed 954607 records in 53h26m0.040308808s (started 2021-10-19 17:58:06.533669374 +0000 UTC m=+0.002113478)
-processed 1152145 records in 78h4m0.012184985s (started 2021-10-19 17:58:06.533669374 +0000 UTC m=+0.002113478)
-processed 1489494 records in 131h5m0.019974672s (started 2021-10-19 17:58:06.533669374 +0000 UTC m=+0.002113478)
-processed 1556025 records in 143h10m0.040390679s (started 2021-10-19 17:58:06.533669374 +0000 UTC m=+0.002113478)
-processed 1704642 records in 172h9m0.014664052s (started 2021-10-19 17:58:06.533669374 +0000 UTC m=+0.002113478)
-```
-
-Remember, there are 11 million records in the Name Authority File so it's pretty easy to extropolate that the amount of time it will take to index another 10 million records will stretch in to weeks and probably months.
-
-Indexing in SQLite is slow enough that any of the other alternatives may be preferable. For example it takes Elasticsearch a couple of minutes to index all 11 million records in a couple of minutes.
 
 ## Docker
 

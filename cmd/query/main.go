@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/aaronland/go-pagination/countable"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/sfomuseum/go-libraryofcongress-database"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/bleve"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/sql"
