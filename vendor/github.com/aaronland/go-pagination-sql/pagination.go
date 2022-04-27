@@ -12,25 +12,25 @@ import (
 
 type PaginatedResponse interface {
 	Rows() *gosql.Rows
-	Pagination() pagination.Pagination
+	Results() pagination.Results
 }
 
 type PaginatedResponseCallback func(PaginatedResponse) error
 
 type DefaultPaginatedResponse struct {
-	rows       *gosql.Rows
-	pagination pagination.Pagination
+	rows    *gosql.Rows
+	results pagination.Results
 }
 
 func (r *DefaultPaginatedResponse) Rows() *gosql.Rows {
 	return r.rows
 }
 
-func (r *DefaultPaginatedResponse) Pagination() pagination.Pagination {
-	return r.pagination
+func (r *DefaultPaginatedResponse) Results() pagination.Results {
+	return r.results
 }
 
-func QueryPaginatedAll(db *gosql.DB, opts pagination.PaginationOptions, cb PaginatedResponseCallback, query string, args ...interface{}) error {
+func QueryPaginatedAll(db *gosql.DB, opts pagination.Options, cb PaginatedResponseCallback, query string, args ...interface{}) error {
 
 	for {
 
@@ -46,21 +46,21 @@ func QueryPaginatedAll(db *gosql.DB, opts pagination.PaginationOptions, cb Pagin
 			return err
 		}
 
-		pg := rsp.Pagination()
+		pg := rsp.Results()
 
-		next := pg.NextPage()
+		next := countable.NextPage(pg)
 
 		if next == 0 {
 			break
 		}
 
-		opts.Page(next)
+		opts.Pointer(next)
 	}
 
 	return nil
 }
 
-func QueryPaginated(db *gosql.DB, opts pagination.PaginationOptions, query string, args ...interface{}) (PaginatedResponse, error) {
+func QueryPaginated(db *gosql.DB, opts pagination.Options, query string, args ...interface{}) (PaginatedResponse, error) {
 
 	done_ch := make(chan bool)
 	err_ch := make(chan error)
@@ -109,7 +109,9 @@ func QueryPaginated(db *gosql.DB, opts pagination.PaginationOptions, query strin
 		// please make fewer ((((())))) s
 		// (20180409/thisisaaronland)
 
-		page = int(math.Max(1.0, float64(opts.Page())))
+		page_num := countable.PageFromOptions(opts)
+		page = int(math.Max(1.0, float64(page_num)))
+
 		per_page = int(math.Max(1.0, float64(opts.PerPage())))
 		spill = int(math.Max(1.0, float64(opts.Spill())))
 
@@ -156,15 +158,15 @@ func QueryPaginated(db *gosql.DB, opts pagination.PaginationOptions, query strin
 		}
 	}
 
-	pg, err := countable.NewPaginationFromCountWithOptions(opts, total_count)
+	pg, err := countable.NewResultsFromCountWithOptions(opts, total_count)
 
 	if err != nil {
 		return nil, err
 	}
 
 	rsp := DefaultPaginatedResponse{
-		pagination: pg,
-		rows:       rows,
+		results: pg,
+		rows:    rows,
 	}
 
 	return &rsp, nil

@@ -9,17 +9,17 @@ const PAGE int64 = 1
 const SPILL int64 = 2
 const COUNTABLE string = "*"
 
-type CountablePaginationOptions struct {
-	pagination.PaginationOptions
+type CountableOptions struct {
+	pagination.Options
 	perpage int64
 	page    int64
 	spill   int64
 	column  string
 }
 
-func NewCountablePaginationOptions() (pagination.PaginationOptions, error) {
+func NewCountableOptions() (pagination.Options, error) {
 
-	opts := &CountablePaginationOptions{
+	opts := &CountableOptions{
 		perpage: PER_PAGE,
 		page:    PAGE,
 		spill:   SPILL,
@@ -29,7 +29,11 @@ func NewCountablePaginationOptions() (pagination.PaginationOptions, error) {
 	return opts, nil
 }
 
-func (opts *CountablePaginationOptions) PerPage(args ...int64) int64 {
+func (p *CountableOptions) Method() pagination.Method {
+	return pagination.Countable
+}
+
+func (opts *CountableOptions) PerPage(args ...int64) int64 {
 
 	if len(args) >= 1 {
 		opts.perpage = args[0]
@@ -38,16 +42,16 @@ func (opts *CountablePaginationOptions) PerPage(args ...int64) int64 {
 	return opts.perpage
 }
 
-func (opts *CountablePaginationOptions) Page(args ...int64) int64 {
+func (opts *CountableOptions) Pointer(args ...interface{}) interface{} {
 
 	if len(args) >= 1 {
-		opts.page = args[0]
+		opts.page = args[0].(int64)
 	}
 
 	return opts.page
 }
 
-func (opts *CountablePaginationOptions) Spill(args ...int64) int64 {
+func (opts *CountableOptions) Spill(args ...int64) int64 {
 
 	if len(args) >= 1 {
 		opts.spill = args[0]
@@ -56,7 +60,7 @@ func (opts *CountablePaginationOptions) Spill(args ...int64) int64 {
 	return opts.spill
 }
 
-func (opts *CountablePaginationOptions) Column(args ...string) string {
+func (opts *CountableOptions) Column(args ...string) string {
 
 	if len(args) >= 1 {
 		opts.column = args[0]
