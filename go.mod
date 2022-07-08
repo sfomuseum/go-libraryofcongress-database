@@ -15,7 +15,7 @@ require (
 	github.com/aaronland/go-sqlite v0.2.0
 	github.com/blevesearch/bleve v1.0.14
 	github.com/cenkalti/backoff/v4 v4.1.3
-	github.com/elastic/go-elasticsearch/v7 v7.17.1
+	github.com/elastic/go-elasticsearch/v7 v7.13.0
 	github.com/mattn/go-sqlite3 v1.14.13
 	github.com/sfomuseum/go-csvdict v1.0.0
 	github.com/sfomuseum/go-flags v0.8.2
