@@ -13,7 +13,7 @@ import (
 type QueryVars struct {
 	Query      string
 	Results    []*database.QueryResult
-	Pagination pagination.Pagination
+	Pagination pagination.Results
 	Error      error
 }
 
@@ -45,7 +45,7 @@ func QueryHandler(opts *Options) (http.Handler, error) {
 
 		vars.Query = q
 
-		pg_opts, err := countable.NewCountablePaginationOptions()
+		pg_opts, err := countable.NewCountableOptions()
 
 		if err != nil {
 			vars.Error = err
@@ -64,7 +64,7 @@ func QueryHandler(opts *Options) (http.Handler, error) {
 		}
 
 		if page > 0 {
-			pg_opts.Page(page)
+			pg_opts.Pointer(page)
 		}
 
 		results, pagination, err := opts.Database.Query(ctx, q, pg_opts)

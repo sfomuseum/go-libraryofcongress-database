@@ -143,7 +143,8 @@ go.etcd.io/bbolt
 # golang.org/x/net v0.0.0-20201002202402-0a1ea396d57c
 golang.org/x/net/html
 golang.org/x/net/html/atom
-# golang.org/x/sys v0.0.0-20200930185726-fdedc70b468f
+# golang.org/x/sys v0.0.0-20220708085239-5a0f0661e09d
+## explicit
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 golang.org/x/sys/windows

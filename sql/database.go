@@ -147,7 +147,7 @@ func (sql_db *SQLDatabase) indexSource(ctx context.Context, src *database.Source
 	return src.Index(ctx, cb)
 }
 
-func (sql_db *SQLDatabase) Query(ctx context.Context, q string, pg_opts pagination.PaginationOptions) ([]*database.QueryResult, pagination.Pagination, error) {
+func (sql_db *SQLDatabase) Query(ctx context.Context, q string, pg_opts pagination.Options) ([]*database.QueryResult, pagination.Results, error) {
 
 	query_str := "SELECT id, label, source FROM search WHERE label MATCH ?  OR id MATCH ? ORDER BY label"
 
@@ -160,7 +160,7 @@ func (sql_db *SQLDatabase) Query(ctx context.Context, q string, pg_opts paginati
 	results := make([]*database.QueryResult, 0)
 
 	rows := pg_rsp.Rows()
-	pagination := pg_rsp.Pagination()
+	pagination := pg_rsp.Results()
 
 	defer rows.Close()
 

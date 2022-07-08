@@ -20,4 +20,5 @@ require (
 	github.com/sfomuseum/go-csvdict v1.0.0
 	github.com/sfomuseum/go-flags v0.8.2
 	github.com/sfomuseum/go-timings v1.0.0
+	golang.org/x/sys v0.0.0-20220708085239-5a0f0661e09d // indirect
 )

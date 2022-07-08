@@ -13,7 +13,7 @@ import (
 
 type LibraryOfCongressDatabase interface {
 	Index(context.Context, []*Source, timings.Monitor) error
-	Query(context.Context, string, pagination.PaginationOptions) ([]*QueryResult, pagination.Pagination, error)
+	Query(context.Context, string, pagination.Options) ([]*QueryResult, pagination.Results, error)
 }
 
 type LibraryOfCongressInitializeFunc func(ctx context.Context, uri string) (LibraryOfCongressDatabase, error)

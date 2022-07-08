@@ -12,7 +12,7 @@ import (
 
 type QueryResponse struct {
 	Results    []*database.QueryResult `json:"results"`
-	Pagination pagination.Pagination   `json:"pagination"`
+	Pagination pagination.Results   `json:"pagination"`
 }
 
 func QueryHandler(opts *Options) (http.Handler, error) {
@@ -21,7 +21,7 @@ func QueryHandler(opts *Options) (http.Handler, error) {
 
 		ctx := req.Context()
 
-		pg_opts, err := countable.NewCountablePaginationOptions()
+		pg_opts, err := countable.NewCountableOptions()
 
 		if err != nil {
 			http.Error(rsp, err.Error(), http.StatusInternalServerError)
@@ -50,7 +50,7 @@ func QueryHandler(opts *Options) (http.Handler, error) {
 		}
 
 		if page > 0 {
-			pg_opts.Page(page)
+			pg_opts.Pointer(page)
 		}
 
 		results, pagination, err := opts.Database.Query(ctx, q, pg_opts)

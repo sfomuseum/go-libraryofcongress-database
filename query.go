@@ -18,9 +18,9 @@ func (r *QueryResult) String() string {
 
 type QueryPaginatedCallbackFunc func(context.Context, []*QueryResult) error
 
-func QueryPaginated(ctx context.Context, db LibraryOfCongressDatabase, q string, pg_opts pagination.PaginationOptions, cb QueryPaginatedCallbackFunc) error {
+func QueryPaginated(ctx context.Context, db LibraryOfCongressDatabase, q string, pg_opts pagination.Options, cb QueryPaginatedCallbackFunc) error {
 
-	page := pg_opts.Page()
+	page := pg_opts.Pointer().(int64)
 	pages := int64(-1)
 
 	for {
@@ -51,7 +51,7 @@ func QueryPaginated(ctx context.Context, db LibraryOfCongressDatabase, q string,
 		page += 1
 
 		if page <= pages {
-			pg_opts.Page(page)
+			pg_opts.Pointer(page)
 		} else {
 			break
 		}

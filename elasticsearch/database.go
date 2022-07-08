@@ -172,7 +172,7 @@ func (elasticsearch_db *ElasticsearchDatabase) indexSource(ctx context.Context, 
 	return src.Index(ctx, cb)
 }
 
-func (elasticsearch_db *ElasticsearchDatabase) Query(ctx context.Context, q string, pg_opts pagination.PaginationOptions) ([]*database.QueryResult, pagination.Pagination, error) {
+func (elasticsearch_db *ElasticsearchDatabase) Query(ctx context.Context, q string, pg_opts pagination.Options) ([]*database.QueryResult, pagination.Results, error) {
 
 	return nil, nil, fmt.Errorf("Not implemented")
 }
