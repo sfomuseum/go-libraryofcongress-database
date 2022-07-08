@@ -1,0 +1,8 @@
+CREATE TABLE identifiers(
+	id TEXT PRIMARY KEY,
+	source TEXT,
+	label TEXT
+);
+
+CREATE INDEX `by_source` ON identifiers (`source`);
+CREATE INDEX `by_label` ON identifiers (`label`);

@@ -2,10 +2,13 @@ package tables
 
 import (
 	"context"
+	_ "embed"
 	"fmt"
 	"github.com/aaronland/go-sqlite"
-	_ "log"
 )
+
+//go:embed search.schema
+var search_schema string
 
 // type SeachTable implements the `sqlite.Table` interface for searching LoC data (using the SQLite FTS5 plugin).
 type SearchTable struct {
@@ -55,13 +58,7 @@ func (t *SearchTable) Name() string {
 
 // Schema() returns the schema used to create the identifiers table.
 func (t *SearchTable) Schema() string {
-
-	schema := `CREATE VIRTUAL TABLE %s USING fts4(
-		id, source, label
-	);`
-
-	// so dumb...
-	return fmt.Sprintf(schema, t.Name())
+	return search_schema
 }
 
 // IndexRecord() indexes 'i' in the database represented by 'db'.

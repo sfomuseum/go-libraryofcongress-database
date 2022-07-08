@@ -2,9 +2,13 @@ package tables
 
 import (
 	"context"
+	_ "embed"
 	"fmt"
 	"github.com/aaronland/go-sqlite"
 )
+
+//go:embed identifiers.schema
+var identifiers_schema string
 
 // type IdentifiersTable implements the `sqlite.Table` interface for mapping LoC identifiers to their corresponding label.
 type IdentifiersTable struct {
@@ -53,13 +57,7 @@ func (t *IdentifiersTable) Name() string {
 
 // Schema() returns the schema used to create the identifiers table.
 func (t *IdentifiersTable) Schema() string {
-
-	schema := `CREATE TABLE %s(
-		id TEXT PRIMARY KEY, source TEXT, label TEXT
-	);`
-
-	// so dumb...
-	return fmt.Sprintf(schema, t.Name())
+	return identifiers_schema
 }
 
 // IndexRecord() indexes 'i' in the database represented by 'db'.
