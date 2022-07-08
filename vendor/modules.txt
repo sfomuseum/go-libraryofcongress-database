@@ -25,6 +25,7 @@ github.com/aaronland/go-roster
 # github.com/aaronland/go-sqlite v0.2.0
 ## explicit
 github.com/aaronland/go-sqlite
+github.com/aaronland/go-sqlite/database
 # github.com/akrylysov/algnhsa v0.12.1
 github.com/akrylysov/algnhsa
 # github.com/aws/aws-lambda-go v1.9.0
