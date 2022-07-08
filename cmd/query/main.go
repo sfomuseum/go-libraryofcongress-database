@@ -27,7 +27,7 @@ func main() {
 		log.Fatalf("Failed to create database, %v", err)
 	}
 
-	pg_opts, err := countable.NewCountablePaginationOptions()
+	pg_opts, err := countable.NewCountableOptions()
 
 	if err != nil {
 		log.Fatalf("Failed to create pagination options, %v", err)

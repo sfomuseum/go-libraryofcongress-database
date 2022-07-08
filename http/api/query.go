@@ -12,7 +12,7 @@ import (
 
 type QueryResponse struct {
 	Results    []*database.QueryResult `json:"results"`
-	Pagination pagination.Results   `json:"pagination"`
+	Pagination pagination.Results      `json:"pagination"`
 }
 
 func QueryHandler(opts *Options) (http.Handler, error) {

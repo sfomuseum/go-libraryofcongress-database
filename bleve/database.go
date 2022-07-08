@@ -86,9 +86,9 @@ func (bleve_db *BleveDatabase) indexSource(ctx context.Context, src *database.So
 	return src.Index(ctx, cb)
 }
 
-func (bleve_db *BleveDatabase) Query(ctx context.Context, q string, pg_opts pagination.PaginationOptions) ([]*database.QueryResult, pagination.Pagination, error) {
+func (bleve_db *BleveDatabase) Query(ctx context.Context, q string, pg_opts pagination.Options) ([]*database.QueryResult, pagination.Results, error) {
 
-	page := pg_opts.Page()
+	page := pg_opts.Pointer().(int64)
 	per_page := pg_opts.PerPage()
 
 	size := int(per_page)
@@ -126,7 +126,7 @@ func (bleve_db *BleveDatabase) Query(ctx context.Context, q string, pg_opts pagi
 
 	total := int64(rsp.Total)
 
-	pg, err := countable.NewPaginationFromCountWithOptions(pg_opts, total)
+	pg, err := countable.NewResultsFromCountWithOptions(pg_opts, total)
 
 	if err != nil {
 		return nil, nil, fmt.Errorf("Failed to derive pagination, %w", err)

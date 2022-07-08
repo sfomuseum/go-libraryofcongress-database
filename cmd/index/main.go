@@ -12,7 +12,6 @@ import (
 	"github.com/sfomuseum/go-timings"
 	"log"
 	"os"
-	"time"
 )
 
 func main() {
@@ -48,8 +47,7 @@ func main() {
 		log.Fatalf("Failed to derive database sources from paths, %v", err)
 	}
 
-	d := time.Second * 60
-	monitor, err := timings.NewCounterMonitor(ctx, d)
+	monitor, err := timings.NewMonitor(ctx, "counter://PT60S")
 
 	if err != nil {
 		log.Fatalf("Failed to create timings monitor, %v", err)
