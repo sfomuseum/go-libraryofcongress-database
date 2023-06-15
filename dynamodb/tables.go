@@ -23,10 +23,6 @@ var DynamoDBTables = map[string]*dynamodb.CreateTableInput{
 				AttributeName: aws.String("Label"),
 				AttributeType: aws.String("S"),
 			},
-			{
-				AttributeName: aws.String("Source"),
-				AttributeType: aws.String("S"),
-			},
 		},
 		GlobalSecondaryIndexes: []*dynamodb.GlobalSecondaryIndex{
 			{
