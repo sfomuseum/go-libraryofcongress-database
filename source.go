@@ -15,7 +15,7 @@ type SourceIndexCallback func(context.Context, map[string]string) error
 
 type Source struct {
 	Label  string
-	Reader io.Reader
+	Reader io.ReadCloser
 }
 
 func (src *Source) Index(ctx context.Context, cb SourceIndexCallback) error {
@@ -64,7 +64,7 @@ func SourcesFromPaths(ctx context.Context, data_paths map[string]string) ([]*Sou
 
 	for source, path := range data_paths {
 
-		var r io.Reader
+		var r io.ReadCloser
 
 		fh, err := os.Open(path)
 
@@ -76,7 +76,7 @@ func SourcesFromPaths(ctx context.Context, data_paths map[string]string) ([]*Sou
 
 		switch ext {
 		case ".bz2":
-			r = bzip2.NewReader(fh)
+			r = io.NopCloser(bzip2.NewReader(fh))
 		default:
 			r = fh
 		}
