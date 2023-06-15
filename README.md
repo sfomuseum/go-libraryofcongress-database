@@ -10,9 +10,9 @@ This is work in progress and not documented properly yet. The code will continue
 
 The first goal is to have a simple, bare-bones HTTP server for querying data in the CSV files produced by the [sfomuseum/go-libraryofcongress](https://github.com/sfomuseum/go-libraryofcongress) package.
 
-The second goal is to be able to build, compile and deploy the web application and all its data (as SQLite databases) as a self-contained container image to a low-cost service like AWS App Runner.
+The second goal is to be able to build, compile and deploy the web application and all its data (as SQLite databases) as a self-contained container image to a low-cost service like AWS App Runner or AWS Lambda Function URLs.
 
-A third goal is to have a generic database interface such that the same code can be used with a variety of databases. As written the `server` tool only has a single database "driver" for querying SQLite databases but there are tools for indexing data in both Elasticsearch and SQLite databases.
+A third goal is to have a generic database interface such that the same code can be used with a variety of databases. As written the `server` tool only has a single database "driver" for querying SQLite databases but there are tools for indexing data in both Elasticsearch, DynamoDB and SQLite databases.
 
 ## Data
 
@@ -135,6 +135,14 @@ sql://sqlite3?dsn=/usr/local/data/loc.db
 ```
 
 ## Tools
+
+```
+$> make cli
+go build -mod vendor -ldflags="-s -w" --tags fts5 -o bin/server cmd/server/main.go
+go build -mod vendor -ldflags="-s -w" --tags fts5 -o bin/query cmd/query/main.go
+go build -mod vendor -ldflags="-s -w" --tags fts5 -o bin/index cmd/index/main.go
+go build -mod vendor -ldflags="-s -w" -o bin/create-dynamodb-csv cmd/create-dynamodb-csv/main.go
+```
 
 ### index
 
@@ -277,7 +285,10 @@ The `query` tool is a command-line application to perform fulltext queries again
 #### bleve
 
 ```
-$> ./bin/query -database-uri bleve:///usr/local/data/libraryofcongress.db Montreal
+$> ./bin/query \
+	-database-uri bleve:///usr/local/data/libraryofcongress.db \
+	Montreal
+	
 lcsh:sh85087079 Montreal River (Ont.)
 lcsh:sh2010014761 Alfa Romeo Montreal automobile
 lcsh:sh2017003022 Montreal Massacre, Montréal, Québec, 1989
@@ -297,7 +308,10 @@ lcsh:sh2011000946 Airport control towers--Washington (State)
 #### sqlite
 
 ```
-$> ./bin/query -database-uri 'sql://sqlite3?dsn=test.db' Montreal
+$> ./bin/query \
+	-database-uri 'sql://sqlite3?dsn=test.db' \
+	Montreal
+	
 lcsh:sh2010014761 Alfa Romeo Montreal automobile
 lcsh:sh94006536 Boulevard Saint-Laurent (Montréal, Québec)
 lcsh:sh2009118684 Central business districts--Québec (Province)--Montréal--Maps
