@@ -28,6 +28,41 @@ A sample SQLite database for Library of Congress subject headings is currently i
 
 _TBW_
 
+### "docstore" (aka DynamoDB)
+
+* https://gocloud.dev/howto/docstore/
+* https://gocloud.dev/howto/docstore/#dynamodb
+
+Currently on DynamoDB `docstore` collections are supported by default. If you need to support other databases you will need to clone and update the code in this package to add the relevant `import` statement. For example if you wanted to update the [cmd/index](cmd/index/main.go) tool to add support for MongoDB then your code would look like this:
+
+```
+package main
+
+import (
+	_ "gocloud.dev/docstore/mongodocstore"
+)
+
+import (
+	"context"
+	"log"
+
+	"github.com/sfomuseum/go-libraryofcongress-database/app/index"
+	_ "github.com/sfomuseum/go-libraryofcongress-database/docstore"
+)
+
+func main() {
+
+	ctx := context.Background()
+	logger := log.Default()
+
+	err := index.Run(ctx, logger)
+
+	if err != nil {
+		logger.Fatalf("Failed to run indexer, %v", err)
+	}
+}
+```
+
 ### Bleve
 
 * https://blevesearch.com/
@@ -53,6 +88,30 @@ For example:
 ```
 bleve:///usr/local/data/loc.db
 ```
+
+### dynamodb
+
+```
+awsdynamodb://libraryofcongress?partition_key=Id&region={REGION}&credentials={CREDENTIALS}
+```
+
+Where `{CREDENTIALS}` is a valid [aaronland/go-aws-session](https://github.com/aaronland/go-aws-session#credentials) credentials string.
+
+Or, if you are connecting to a local instance of DynamoDB:
+
+```
+awsdynamodb://libraryofcongress?local=true&partition_key=Id
+```
+
+You can use the `cmd/create-dynamodb-tables` tool to create a new `libraryofcongress` table in your DynamoDB instance. For example:
+
+```
+$> go run -mod vendor cmd/create-dynamodb-tables/main.go \
+	-refresh \
+	-client-uri 'awsdynamodb://libraryofcongress?local=true&partition_key=Id'
+```
+
+You can also use this tool to create tables in an AWS-hosted DynamoDB instance.
 
 ### elasticsearch
 
@@ -100,6 +159,35 @@ processed 444805 records in 2h5m0.002327734s (started 2021-10-27 15:52:35.790947
 $> du -h -d 1 /usr/local/data/libraryofcongress.db/
 761M	libraryofcongress.db/
 ```
+
+#### dynamodb
+
+```
+$> ./bin/index \
+	-database-uri 'awsdynamodb://libraryofcongress?partition_key=Id&region={REGION}&credentials={CREDENTIALS}' \
+	/usr/local/data/lcsh.csv.bz2
+```
+
+Alternately you can use the [import S3 data in to a DynamoDB table](https://aws.amazon.com/blogs/database/amazon-dynamodb-can-now-import-amazon-s3-data-into-a-new-table/) functionality. The first step is to create a single CSV file of both the LCNAF and LCSH data with an additional `Source` column for each row. The `create-dynamodb-csv` tool was written for this purpose:
+
+```
+$> ./bin/create-dynamodb-csv \
+	-lcnaf-data /usr/local/data/lcnaf.csv.bz2 \
+	-lcsh-data /usr/local/data/lcsh.csv.bz2 \
+	> loc.csv
+```
+
+Next gzip the new CSV file and upload it to an S3 bucket. Eventually the `create-dynamodb-csv` tool will be updated to be able to do both of these things by default but today it can not.
+
+```
+$> gzip loc.csv
+$> aws s3 cp loc.csv.gz s3://{YOUR_S3_BUCKET}
+```
+
+Finally [follow the instructions for importing your CSV data into DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/S3DataImport.HowItWorks.html). Two things to note:
+
+1. The import process will take a while to complete.
+2. You will need to manually add a secondary index on the `Label` column using the `Id` column as the sort key. Or at least I did. If there was a way to specify it during the initial import I missed that. This will also take a while to complete.
 
 #### elasticsearch
 
@@ -196,6 +284,17 @@ $> ./bin/query -database-uri bleve:///usr/local/data/libraryofcongress.db Montre
 lcsh:sh85087079 Montreal River (Ont.)
 lcsh:sh2010014761 Alfa Romeo Montreal automobile
 lcsh:sh2017003022 Montreal Massacre, Montréal, Québec, 1989
+```
+
+#### dynamodb
+
+```
+$> ./bin/query \
+	-cursor-pagination \
+	-database-uri 'awsdynamodb://libraryofcongress?partition_key=Id&region={REGION}&credentials={CREDENTIALS}' \
+	sh2011000946
+	
+lcsh:sh2011000946 Airport control towers--Washington (State)
 ```
 
 #### sqlite

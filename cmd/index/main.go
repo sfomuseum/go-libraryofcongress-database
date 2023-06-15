@@ -1,4 +1,3 @@
-// The `to-bleve` tool will index CSV data produced by the tools in `sfomuseum/go-libraryofcongress` in an Bleve index.
 package main
 
 import (
