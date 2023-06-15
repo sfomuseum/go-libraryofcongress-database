@@ -3,8 +3,9 @@ package bleve
 import (
 	"context"
 	"fmt"
-	"github.com/blevesearch/bleve"
 	"os"
+
+	"github.com/blevesearch/bleve"	
 )
 
 type Doc struct {

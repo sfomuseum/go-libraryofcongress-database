@@ -2,12 +2,13 @@ package api
 
 import (
 	"encoding/json"
+	_ "log"
+	"net/http"
+
 	"github.com/aaronland/go-http-sanitize"
 	"github.com/aaronland/go-pagination"
 	"github.com/aaronland/go-pagination/countable"
-	"github.com/sfomuseum/go-libraryofcongress-database"
-	_ "log"
-	"net/http"
+	"github.com/sfomuseum/go-libraryofcongress-database"	
 )
 
 type QueryResponse struct {

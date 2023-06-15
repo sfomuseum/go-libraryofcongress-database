@@ -5,6 +5,10 @@ package main
 
 import (
 	"context"
+	"html/template"
+	"log"
+	"net/http"
+
 	"github.com/aaronland/go-http-bootstrap"
 	"github.com/aaronland/go-http-server"
 	_ "github.com/mattn/go-sqlite3"
@@ -14,10 +18,7 @@ import (
 	"github.com/sfomuseum/go-libraryofcongress-database/http/api"
 	"github.com/sfomuseum/go-libraryofcongress-database/http/www"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/sql"
-	"github.com/sfomuseum/go-libraryofcongress-database/templates/html"
-	"html/template"
-	"log"
-	"net/http"
+	"github.com/sfomuseum/go-libraryofcongress-database/templates/html"	
 )
 
 func main() {
@@ -54,13 +55,13 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	err = bootstrap.AppendAssetHandlers(mux)
+	bootstrap_opts := bootstrap.DefaultBootstrapOptions()
+	
+	err = bootstrap.AppendAssetHandlers(mux, bootstrap_opts)
 
 	if err != nil {
 		log.Fatalf("Failed to append Bootstrap assets handler, %v", err)
 	}
-
-	bootstrap_opts := bootstrap.DefaultBootstrapOptions()
 
 	www_opts := &www.Options{
 		Database:  db,

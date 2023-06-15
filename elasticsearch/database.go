@@ -5,16 +5,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
+	"net/url"
+	"strconv"
+	"time"
+
 	"github.com/aaronland/go-pagination"
 	"github.com/cenkalti/backoff/v4"
 	es "github.com/elastic/go-elasticsearch/v7"
 	"github.com/elastic/go-elasticsearch/v7/esutil"
 	"github.com/sfomuseum/go-libraryofcongress-database"
-	"github.com/sfomuseum/go-timings"
-	"log"
-	"net/url"
-	"strconv"
-	"time"
+	"github.com/sfomuseum/go-timings"	
 )
 
 type ElasticsearchDatabase struct {

@@ -4,14 +4,15 @@ package main
 import (
 	"context"
 	"flag"
+	"github.com/sfomuseum/go-timings"
+	"log"
+	"os"
+
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/sfomuseum/go-libraryofcongress-database"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/bleve"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/elasticsearch"
-	_ "github.com/sfomuseum/go-libraryofcongress-database/sql"
-	"github.com/sfomuseum/go-timings"
-	"log"
-	"os"
+	_ "github.com/sfomuseum/go-libraryofcongress-database/sql"	
 )
 
 func main() {

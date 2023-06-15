@@ -3,10 +3,11 @@ package sqlite
 import (
 	"context"
 	"fmt"
+	"log"
+
 	"github.com/aaronland/go-sqlite"
 	loc_database "github.com/sfomuseum/go-libraryofcongress-database"
-	"github.com/sfomuseum/go-timings"
-	"log"
+	"github.com/sfomuseum/go-timings"	
 )
 
 func Index(ctx context.Context, sources []*loc_database.Source, sqlite_db sqlite.Database, tables []sqlite.Table, monitor timings.Monitor) error {

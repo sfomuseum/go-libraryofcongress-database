@@ -3,12 +3,13 @@ package database
 import (
 	"context"
 	"fmt"
-	"github.com/aaronland/go-pagination"
-	"github.com/aaronland/go-roster"
-	"github.com/sfomuseum/go-timings"
 	"net/url"
 	"sort"
 	"strings"
+
+	"github.com/aaronland/go-pagination"
+	"github.com/aaronland/go-roster"
+	"github.com/sfomuseum/go-timings"	
 )
 
 type LibraryOfCongressDatabase interface {
