@@ -50,8 +50,8 @@
 </table>
 
 <div style="display:flex; justify-content:center;">
-    <div style="display:inline;margin:.5rem;">{{ if gt .Pagination.PreviousPage 0 }}<a href="/?q={{ .Query }}&page={{ .Pagination.PreviousPage }}">previous</a>{{ else }}&#160;{{ end }}</div>
-    <div style="display:inline;margin:.5rem;">{{ if gt .Pagination.NextPage 0 }}<a href="/?q={{ .Query }}&page={{ .Pagination.NextPage }}">next</a>{{ else }}&#160;{{ end }}</div>    
+    <div style="display:inline;margin:.5rem;">{{ if gt .Pagination.PreviousPageURI 0 }}<a href="/?q={{ .Query }}&page={{ .Pagination.PreviousPageURI }}">previous</a>{{ else }}&#160;{{ end }}</div>
+    <div style="display:inline;margin:.5rem;">{{ if gt .Pagination.NextPageURI 0 }}<a href="/?q={{ .Query }}&page={{ .Pagination.NextPageURI }}">next</a>{{ else }}&#160;{{ end }}</div>    
 </div>
 
 {{ end }}
