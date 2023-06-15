@@ -9,6 +9,7 @@ import (
 	aa_docstore "github.com/aaronland/gocloud-docstore"
 	gc_docstore "gocloud.dev/docstore"
 	"github.com/aaronland/go-pagination"
+	"github.com/aaronland/go-pagination/cursor"	
 	"github.com/sfomuseum/go-timings"
 	
 )
@@ -60,35 +61,61 @@ func (db *DocstoreDatabase) Index(ctx context.Context, sources []*database.Sourc
 
 func (db *DocstoreDatabase) Query(ctx context.Context, query string, pg_opts pagination.Options) ([]*database.QueryResult, pagination.Results, error) {
 
+	var previous_cursor string
+	var next_cursor string
+
+	previous_cursor = pg_opts.Pointer().(string)
+	
+	results := make([]*database.QueryResult, 0)
+
+	limit := int(pg_opts.PerPage())
+	
 	q := db.collection.Query()
 	q = q.Where("Label", "=", query)
 
+	if previous_cursor != "" {
+		q = q.Where("Id", ">", previous_cursor)
+	}
+	
+	q = q.Limit(limit)
+	
 	iter := q.Get(ctx)
 	defer iter.Stop()
 
-	var doc Document
-	err := iter.Next(ctx, &doc)
+	for {
+		
+		var doc Document
+		err := iter.Next(ctx, &doc)
+		
+		if err != nil {
+			
+			if err == io.EOF {
+				break
+			}
 
-	if err != nil {
-
-		if err == io.EOF {
-			return nil, nil, fmt.Errorf("Not found")
+			return nil, nil, fmt.Errorf("Failed to retrieve next item in iterator, %w", err)
 		}
 
-		return nil, nil, fmt.Errorf("Failed to retrieve next item in iterator, %w", err)
+		qr := &database.QueryResult{
+			Id: doc.Id,
+			Label: doc.Label,
+			Source: doc.Source,
+		}
+
+		results = append(results, qr)
 	}
 
-	qr := &database.QueryResult{
-		Id: doc.Id,
-		Label: doc.Label,
-		Source: doc.Source,
+	if len(results) > 0 {
+		next_cursor = results[ len(results) - 1 ].Id
 	}
+	
+	pg_results, err := cursor.NewPaginationFromCursors(previous_cursor, next_cursor)
 
-	results := []*database.QueryResult{
-		qr,
+	if err != nil {
+		return nil, nil, fmt.Errorf("Failed to build pagination results, %w", err)
 	}
-
-	return results, nil, nil
+	
+	return results, pg_results, nil
 }
 
 func (db *DocstoreDatabase) indexSource(ctx context.Context, src *database.Source, monitor timings.Monitor) error {
