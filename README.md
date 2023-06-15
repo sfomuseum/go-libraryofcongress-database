@@ -26,8 +26,6 @@ A sample SQLite database for Library of Congress subject headings is currently i
 
 ## Databases
 
-_TBW_
-
 ### "docstore" (aka DynamoDB)
 
 * https://gocloud.dev/howto/docstore/
@@ -111,7 +109,7 @@ $> go run -mod vendor cmd/create-dynamodb-tables/main.go \
 	-client-uri 'awsdynamodb://libraryofcongress?local=true&partition_key=Id'
 ```
 
-You can also use this tool to create tables in an AWS-hosted DynamoDB instance.
+You can also use this tool to create tables in an AWS-hosted DynamoDB instance however given the volume of LoC data published you many want to use the tools for importing data in to DynamoDB from an S3 bucket described below in the [index](#dynamodb-1) section. You can do either but the import-from-S3 functionality will try to create the table from scratch and fail if it already exists.
 
 ### elasticsearch
 
