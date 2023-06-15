@@ -17,7 +17,7 @@ type SearchTable struct {
 	name string
 }
 
-//  NewSearchTableWithTable() returns a new `SearchTable` instance for use with the database identifier by 'db'.
+// NewSearchTableWithTable() returns a new `SearchTable` instance for use with the database identifier by 'db'.
 func NewSearchTableWithDatabase(ctx context.Context, db sqlite.Database) (sqlite.Table, error) {
 
 	t, err := NewSearchTable(ctx)

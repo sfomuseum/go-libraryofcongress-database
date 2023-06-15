@@ -3,62 +3,23 @@ package main
 
 import (
 	"context"
-	"flag"
+	"log"
+
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/sfomuseum/go-libraryofcongress-database"
+	"github.com/sfomuseum/go-libraryofcongress-database/app/index"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/bleve"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/elasticsearch"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/sql"
-	"github.com/sfomuseum/go-timings"
-	"log"
-	"os"
 )
 
 func main() {
 
-	database_uri := flag.String("database-uri", "", "...")
-
-	lcsh_data := flag.String("lcsh-data", "", "The path to your LCSH CSV data.")
-	lcnaf_data := flag.String("lcnaf-data", "", "The path to your LCNAF CSV data.")
-
-	flag.Parse()
-
 	ctx := context.Background()
+	logger := log.Default()
 
-	db, err := database.NewLibraryOfCongressDatabase(ctx, *database_uri)
-
-	if err != nil {
-		log.Fatalf("Failed to create database, %w", err)
-	}
-
-	data_paths := make(map[string]string)
-
-	if *lcsh_data != "" {
-		data_paths["lcsh"] = *lcsh_data
-	}
-
-	if *lcnaf_data != "" {
-		data_paths["lcnaf"] = *lcnaf_data
-	}
-
-	data_sources, err := database.SourcesFromPaths(ctx, data_paths)
+	err := index.Run(ctx, logger)
 
 	if err != nil {
-		log.Fatalf("Failed to derive database sources from paths, %v", err)
-	}
-
-	monitor, err := timings.NewMonitor(ctx, "counter://PT60S")
-
-	if err != nil {
-		log.Fatalf("Failed to create timings monitor, %v", err)
-	}
-
-	monitor.Start(ctx, os.Stdout)
-	defer monitor.Stop(ctx)
-
-	err = db.Index(ctx, data_sources, monitor)
-
-	if err != nil {
-		log.Fatalf("Failed to index sources, %v", err)
+		logger.Fatalf("Failed to run indexer, %v", err)
 	}
 }

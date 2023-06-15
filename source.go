@@ -4,10 +4,11 @@ import (
 	"compress/bzip2"
 	"context"
 	"fmt"
-	"github.com/sfomuseum/go-csvdict"
 	"io"
 	"os"
 	"path/filepath"
+
+	"github.com/sfomuseum/go-csvdict"
 )
 
 type SourceIndexCallback func(context.Context, map[string]string) error

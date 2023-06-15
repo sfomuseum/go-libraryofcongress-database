@@ -3,13 +3,14 @@ package bleve
 import (
 	"context"
 	"fmt"
+	_ "log"
+	"net/url"
+
 	"github.com/aaronland/go-pagination"
 	"github.com/aaronland/go-pagination/countable"
 	"github.com/blevesearch/bleve"
 	"github.com/sfomuseum/go-libraryofcongress-database"
 	"github.com/sfomuseum/go-timings"
-	_ "log"
-	"net/url"
 )
 
 type BleveDatabase struct {

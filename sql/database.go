@@ -4,11 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"net/url"
+
 	"github.com/aaronland/go-pagination"
 	pg_sql "github.com/aaronland/go-pagination-sql"
 	"github.com/sfomuseum/go-libraryofcongress-database"
 	"github.com/sfomuseum/go-timings"
-	"net/url"
 )
 
 type SQLDatabase struct {
