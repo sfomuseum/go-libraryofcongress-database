@@ -80,8 +80,6 @@ func (db *DocstoreDatabase) Query(ctx context.Context, query string, pg_opts pag
 	var previous_cursor string
 	var next_cursor string
 
-	// previous_cursor = pg_opts.Pointer().(string)
-
 	results := make([]*database.QueryResult, 0)
 
 	limit := int(pg_opts.PerPage())
@@ -92,10 +90,6 @@ func (db *DocstoreDatabase) Query(ctx context.Context, query string, pg_opts pag
 		q = q.Where("Id", "=", query)
 	} else {
 		q = q.Where("Label", "=", query)
-	}
-
-	if previous_cursor != "" {
-		q = q.Where("Id", ">", previous_cursor)
 	}
 
 	q = q.Limit(limit)

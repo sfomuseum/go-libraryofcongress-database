@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/aaronland/go-pagination"
+	"github.com/aaronland/go-pagination/cursor"
 )
 
 type QueryResult struct {
@@ -21,7 +22,15 @@ type QueryPaginatedCallbackFunc func(context.Context, []*QueryResult) error
 
 func QueryPaginated(ctx context.Context, db LibraryOfCongressDatabase, q string, pg_opts pagination.Options, cb QueryPaginatedCallbackFunc) error {
 
-	page := pg_opts.Pointer().(int64)
+	cursor_pagination := false
+
+	switch pg_opts.(type) {
+	case *cursor.CursorOptions:
+		cursor_pagination = true
+	default:
+		//
+	}
+
 	pages := int64(-1)
 
 	for {
@@ -45,16 +54,24 @@ func QueryPaginated(ctx context.Context, db LibraryOfCongressDatabase, q string,
 			return err
 		}
 
-		if pages == -1 {
-			pages = pg.Pages()
-		}
+		if cursor_pagination {
 
-		page += 1
-
-		if page <= pages {
-			pg_opts.Pointer(page)
-		} else {
 			break
+
+		} else {
+
+			if pages == -1 {
+				pages = pg.Pages()
+			}
+
+			page := pg_opts.Pointer().(int64)
+			page += 1
+
+			if page <= pages {
+				pg_opts.Pointer(page)
+			} else {
+				break
+			}
 		}
 	}
 
