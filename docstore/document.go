@@ -13,4 +13,3 @@ type Document struct {
 func (d *Document) String() string {
 	return fmt.Sprintf("%s:%s %s", d.Source, d.Id, d.Label)
 }
-

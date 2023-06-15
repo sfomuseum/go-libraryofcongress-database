@@ -4,14 +4,14 @@ import (
 	"context"
 	"fmt"
 	"io"
-	
-	"github.com/sfomuseum/go-libraryofcongress-database"
-	aa_docstore "github.com/aaronland/gocloud-docstore"
-	gc_docstore "gocloud.dev/docstore"
+	"regexp"
+
 	"github.com/aaronland/go-pagination"
-	"github.com/aaronland/go-pagination/cursor"	
+	"github.com/aaronland/go-pagination/cursor"
+	aa_docstore "github.com/aaronland/gocloud-docstore"
+	"github.com/sfomuseum/go-libraryofcongress-database"
 	"github.com/sfomuseum/go-timings"
-	
+	gc_docstore "gocloud.dev/docstore"
 )
 
 func init() {
@@ -28,6 +28,8 @@ func init() {
 type DocstoreDatabase struct {
 	database.LibraryOfCongressDatabase
 	collection *gc_docstore.Collection
+	re_lcnaf   *regexp.Regexp
+	re_lcsh    *regexp.Regexp
 }
 
 func NewDocstoreDatabase(ctx context.Context, uri string) (database.LibraryOfCongressDatabase, error) {
@@ -38,8 +40,22 @@ func NewDocstoreDatabase(ctx context.Context, uri string) (database.LibraryOfCon
 		return nil, fmt.Errorf("Failed to create collection, %w", err)
 	}
 
+	re_lcnaf, err := regexp.Compile(`^n\d+$`)
+
+	if err != nil {
+		return nil, fmt.Errorf("Failed to compile LCNAF pattern, %w", err)
+	}
+
+	re_lcsh, err := regexp.Compile(`^sh\d+$`)
+
+	if err != nil {
+		return nil, fmt.Errorf("Failed to compile LCSH pattern, %w", err)
+	}
+
 	db := &DocstoreDatabase{
 		collection: col,
+		re_lcnaf:   re_lcnaf,
+		re_lcsh:    re_lcsh,
 	}
 
 	return db, nil
@@ -64,31 +80,36 @@ func (db *DocstoreDatabase) Query(ctx context.Context, query string, pg_opts pag
 	var previous_cursor string
 	var next_cursor string
 
-	previous_cursor = pg_opts.Pointer().(string)
-	
+	// previous_cursor = pg_opts.Pointer().(string)
+
 	results := make([]*database.QueryResult, 0)
 
 	limit := int(pg_opts.PerPage())
-	
+
 	q := db.collection.Query()
-	q = q.Where("Label", "=", query)
+
+	if db.re_lcnaf.MatchString(query) || db.re_lcsh.MatchString(query) {
+		q = q.Where("Id", "=", query)
+	} else {
+		q = q.Where("Label", "=", query)
+	}
 
 	if previous_cursor != "" {
 		q = q.Where("Id", ">", previous_cursor)
 	}
-	
+
 	q = q.Limit(limit)
-	
+
 	iter := q.Get(ctx)
 	defer iter.Stop()
 
 	for {
-		
+
 		var doc Document
 		err := iter.Next(ctx, &doc)
-		
+
 		if err != nil {
-			
+
 			if err == io.EOF {
 				break
 			}
@@ -97,8 +118,8 @@ func (db *DocstoreDatabase) Query(ctx context.Context, query string, pg_opts pag
 		}
 
 		qr := &database.QueryResult{
-			Id: doc.Id,
-			Label: doc.Label,
+			Id:     doc.Id,
+			Label:  doc.Label,
 			Source: doc.Source,
 		}
 
@@ -106,15 +127,15 @@ func (db *DocstoreDatabase) Query(ctx context.Context, query string, pg_opts pag
 	}
 
 	if len(results) > 0 {
-		next_cursor = results[ len(results) - 1 ].Id
+		next_cursor = results[len(results)-1].Id
 	}
-	
+
 	pg_results, err := cursor.NewPaginationFromCursors(previous_cursor, next_cursor)
 
 	if err != nil {
 		return nil, nil, fmt.Errorf("Failed to build pagination results, %w", err)
 	}
-	
+
 	return results, pg_results, nil
 }
 

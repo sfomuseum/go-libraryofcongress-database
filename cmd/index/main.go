@@ -8,6 +8,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/sfomuseum/go-libraryofcongress-database/app/index"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/bleve"
+	_ "github.com/sfomuseum/go-libraryofcongress-database/docstore"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/elasticsearch"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/sql"
 )

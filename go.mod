@@ -6,6 +6,7 @@ go 1.18
 // don't work with AWS Elasticsearch anymore. Sigh...
 
 require (
+	github.com/aaronland/go-aws-dynamodb v0.0.5
 	github.com/aaronland/go-http-bootstrap v0.4.0
 	github.com/aaronland/go-http-sanitize v0.0.8
 	github.com/aaronland/go-http-server v1.2.0
@@ -14,6 +15,7 @@ require (
 	github.com/aaronland/go-roster v1.0.0
 	github.com/aaronland/go-sqlite v0.2.2
 	github.com/aaronland/gocloud-docstore v0.0.5
+	github.com/aws/aws-sdk-go v1.44.200
 	github.com/blevesearch/bleve v1.0.14
 	github.com/cenkalti/backoff/v4 v4.2.1
 	github.com/elastic/go-elasticsearch/v7 v7.13.0
@@ -26,7 +28,6 @@ require (
 
 require (
 	github.com/RoaringBitmap/roaring v0.4.23 // indirect
-	github.com/aaronland/go-aws-dynamodb v0.0.5 // indirect
 	github.com/aaronland/go-aws-session v0.0.6 // indirect
 	github.com/aaronland/go-http-rewrite v1.1.0 // indirect
 	github.com/aaronland/go-http-static v0.0.3 // indirect
@@ -34,7 +35,6 @@ require (
 	github.com/aaronland/go-string v0.1.2 // indirect
 	github.com/akrylysov/algnhsa v1.0.0 // indirect
 	github.com/aws/aws-lambda-go v1.37.0 // indirect
-	github.com/aws/aws-sdk-go v1.44.200 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.17.4 // indirect
 	github.com/aws/aws-sdk-go-v2/config v1.18.12 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.13.12 // indirect
