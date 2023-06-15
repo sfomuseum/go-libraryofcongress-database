@@ -15,7 +15,7 @@ import (
 	es "github.com/elastic/go-elasticsearch/v7"
 	"github.com/elastic/go-elasticsearch/v7/esutil"
 	"github.com/sfomuseum/go-libraryofcongress-database"
-	"github.com/sfomuseum/go-timings"	
+	"github.com/sfomuseum/go-timings"
 )
 
 type ElasticsearchDatabase struct {

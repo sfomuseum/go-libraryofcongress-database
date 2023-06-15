@@ -18,7 +18,7 @@ import (
 	"github.com/sfomuseum/go-libraryofcongress-database/http/api"
 	"github.com/sfomuseum/go-libraryofcongress-database/http/www"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/sql"
-	"github.com/sfomuseum/go-libraryofcongress-database/templates/html"	
+	"github.com/sfomuseum/go-libraryofcongress-database/templates/html"
 )
 
 func main() {
@@ -56,7 +56,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	bootstrap_opts := bootstrap.DefaultBootstrapOptions()
-	
+
 	err = bootstrap.AppendAssetHandlers(mux, bootstrap_opts)
 
 	if err != nil {

@@ -9,7 +9,7 @@ import (
 
 	"github.com/aaronland/go-pagination"
 	"github.com/aaronland/go-roster"
-	"github.com/sfomuseum/go-timings"	
+	"github.com/sfomuseum/go-timings"
 )
 
 type LibraryOfCongressDatabase interface {

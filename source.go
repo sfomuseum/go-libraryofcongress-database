@@ -8,7 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/sfomuseum/go-csvdict"	
+	"github.com/sfomuseum/go-csvdict"
 )
 
 type SourceIndexCallback func(context.Context, map[string]string) error

@@ -10,7 +10,7 @@ import (
 	"github.com/aaronland/go-pagination/countable"
 	"github.com/blevesearch/bleve"
 	"github.com/sfomuseum/go-libraryofcongress-database"
-	"github.com/sfomuseum/go-timings"	
+	"github.com/sfomuseum/go-timings"
 )
 
 type BleveDatabase struct {

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/blevesearch/bleve"	
+	"github.com/blevesearch/bleve"
 )
 
 type Doc struct {

@@ -8,7 +8,7 @@ import (
 	"github.com/aaronland/go-http-sanitize"
 	"github.com/aaronland/go-pagination"
 	"github.com/aaronland/go-pagination/countable"
-	"github.com/sfomuseum/go-libraryofcongress-database"	
+	"github.com/sfomuseum/go-libraryofcongress-database"
 )
 
 type QueryVars struct {

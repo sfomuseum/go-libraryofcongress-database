@@ -9,7 +9,7 @@ import (
 	"github.com/aaronland/go-pagination"
 	pg_sql "github.com/aaronland/go-pagination-sql"
 	"github.com/sfomuseum/go-libraryofcongress-database"
-	"github.com/sfomuseum/go-timings"	
+	"github.com/sfomuseum/go-timings"
 )
 
 type SQLDatabase struct {

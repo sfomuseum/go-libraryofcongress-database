@@ -4,7 +4,7 @@ import (
 	"context"
 	_ "embed"
 	"fmt"
-	
+
 	"github.com/aaronland/go-sqlite"
 )
 
@@ -18,7 +18,7 @@ type IdentifiersTable struct {
 	name string
 }
 
-//  NewIdentifiersTableWithTable() returns a new `IdentifiersTable` instance for use with the database identifier by 'db'.
+// NewIdentifiersTableWithTable() returns a new `IdentifiersTable` instance for use with the database identifier by 'db'.
 func NewIdentifiersTableWithDatabase(ctx context.Context, db sqlite.Database) (sqlite.Table, error) {
 
 	t, err := NewIdentifiersTable(ctx)
