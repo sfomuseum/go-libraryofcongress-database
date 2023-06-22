@@ -108,7 +108,7 @@ $> go run -mod vendor cmd/create-dynamodb-tables/main.go \
 	-client-uri 'awsdynamodb://libraryofcongress?local=true&partition_key=Id'
 ```
 
-You can also use this tool to create tables in an AWS-hosted DynamoDB instance however given the volume of LoC data published you many want to use the tools for importing data in to DynamoDB from an S3 bucket described below in the [index](#dynamodb-1) section. I estimated that using the `index` tool described below it would take 10+ days to import all 11.5M Library of Congress records. That number may vary depending on how you've configured your DynamoDB tables but by way of comparison importing the same number of records using the S3-import functionality took under an hour. You can do either but the import-from-S3 functionality will try to create the table from scratch and fail if it already exists.
+You can also use this tool to create tables in an AWS-hosted DynamoDB instance however given the volume of LoC data published you many want to use the tools for importing data in to DynamoDB from an S3 bucket described below in the [index](#dynamodb-1) section. You can do either but the import-from-S3 functionality will try to create the table from scratch and fail if it already exists.
 
 ### elasticsearch
 
@@ -189,10 +189,13 @@ $> gzip loc.csv
 $> aws s3 cp loc.csv.gz s3://{YOUR_S3_BUCKET}
 ```
 
-Finally [follow the instructions for importing your CSV data into DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/S3DataImport.HowItWorks.html). Two things to note:
+Finally [follow the instructions for importing your CSV data into DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/S3DataImport.HowItWorks.html). Some things to note:
 
-1. The import process will take a while to complete.
-2. It is important that you manually add a secondary index on the `Label` column (using the `Id` column as the sort key) in the custom stable settings of the import flow. If you don't add that index you will not be able to look up entries by their label name. If you don't add that index at import time the time to backfill an index added after the fact will be measured in days (and you won't be able to delete the errant DynamoDB table until after the backfill is complete).
+1. The S3-import functionality will try to create a new DynamoDB table and fail if you've already created it manually.
+2. The import process will take a while to complete (but not as long as the alternative, discussed below).
+3. It is important that you manually add a secondary index on the `Label` column (using the `Id` column as the sort key) in the custom stable settings of the import flow. If you don't add that index you will not be able to look up entries by their label name. If you don't add that index at import time the time to backfill an index added after the fact will be measured in days (and you won't be able to delete the errant DynamoDB table until after the backfill is complete).
+
+I estimated that using the command-line `index` tool it would take 10+ days to import all 11.5M Library of Congress records. That number may vary depending on how you've configured your DynamoDB tables but by way of comparison importing the same number of records using the S3-import functionality took under an hour.
 
 #### elasticsearch
 
