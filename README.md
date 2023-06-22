@@ -192,7 +192,7 @@ $> aws s3 cp loc.csv.gz s3://{YOUR_S3_BUCKET}
 Finally [follow the instructions for importing your CSV data into DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/S3DataImport.HowItWorks.html). Two things to note:
 
 1. The import process will take a while to complete.
-2. You will need to manually add a secondary index on the `Label` column using the `Id` column as the sort key. Or at least I did. If there was a way to specify it during the initial import I missed that. This will take a long time to complete.
+2. It is important that you manually add a secondary index on the `Label` column (using the `Id` column as the sort key) in the custom stable settings of the import flow. If you don't add that index you will not be able to look up entries by their label name. If you don't add that index at import time the time to backfill an index added after the fact will be measured in days (and you won't be able to delete the errant DynamoDB table until after the backfill is complete).
 
 #### elasticsearch
 
