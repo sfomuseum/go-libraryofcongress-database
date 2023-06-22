@@ -146,6 +146,8 @@ go build -mod vendor -ldflags="-s -w" -o bin/create-dynamodb-csv cmd/create-dyna
 
 ### index
 
+_Note that the index tool expects to index CSV data produced by the `sfomuseum/go-libraryofcongress` [parse-lcnaf](https://github.com/sfomuseum/go-libraryofcongress#parse-lcnaf) and [parse-lcsh](https://github.com/sfomuseum/go-libraryofcongress#parse-lcsh) tools._
+
 #### bleve
 
 ```
