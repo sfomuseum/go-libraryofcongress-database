@@ -30,7 +30,7 @@ A sample SQLite database for Library of Congress subject headings is currently i
 
 * https://aws.amazon.com/dynamodb/
 
-Under the hood the code is using the [gocloud.dev/docstore](https://gocloud.dev/howto/docstore/) abstraction library which supports DynamoDB and a number of other document store engines. Currently on DynamoDB `docstore` collections are supported by default. If you need to support other databases you will need to clone and update the code in this package to add the relevant `import` statement. For example if you wanted to update the [cmd/index](cmd/index/main.go) tool to add support for MongoDB then your code would look like this:
+Under the hood the code is using the [gocloud.dev/docstore](https://gocloud.dev/howto/docstore/) abstraction library which supports DynamoDB and a number of other document store engines (or "collections"). Currently only DynamoDB `docstore` collections are supported by default. If you need to support other databases you will need to clone and update the code in this package to add the relevant `import` statement. For example if you wanted to update the [cmd/index](cmd/index/main.go) tool to add support for MongoDB then your code would look like this:
 
 ```
 package main
