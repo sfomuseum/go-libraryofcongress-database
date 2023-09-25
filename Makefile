@@ -1,4 +1,4 @@
-GOMOD=vendor
+GOMOD=$(shell test -f "go.work" && echo "readonly" || echo "vendor")
 
 cli:
 	go build -mod $(GOMOD) -ldflags="-s -w" --tags fts5 -o bin/server cmd/server/main.go
