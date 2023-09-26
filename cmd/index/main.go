@@ -6,7 +6,6 @@ import (
 
 	"github.com/sfomuseum/go-libraryofcongress-database/app/index"
 	_ "github.com/sfomuseum/go-libraryofcongress-database/sql"
-	_ "github.com/sfomuseum/go-libraryofcongress-database/stdout"
 )
 
 func main() {
