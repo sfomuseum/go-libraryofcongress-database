@@ -28,6 +28,12 @@ This package used to bundle a bunch of different implementations of the `Library
 
 * [StdoutDatabase](stdout/database.go) which implements the indexing methods of the `LibraryOfCongressDatabase` interface and simply emits each record as a CSV-encoded row to STDOUT. This package is really only for testing and debugging purposes and to serve as a simple reference implementation for creating your own implementations.
 
+Other database implementations include:
+
+* https://github.com/sfomuseum/go-libraryofcongress-database-docstore
+* https://github.com/sfomuseum/go-libraryofcongress-database-opensearch
+* https://github.com/sfomuseum/go-libraryofcongress-database-elasticsearch
+
 ## Tools
 
 ```
@@ -180,7 +186,3 @@ And then visit `http://localhost:8080` in a web browser.
 ## See also
 
 * https://github.com/sfomuseum/go-libraryofcongress
-* https://github.com/sfomuseum/go-libraryofcongress-database-docstore
-* https://github.com/sfomuseum/go-libraryofcongress-database-opensearch
-* https://github.com/sfomuseum/go-libraryofcongress-database-elasticsearch
-* https://github.com/sfomuseum/go-libraryofcongress-database-bleve
