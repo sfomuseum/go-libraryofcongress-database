@@ -10,6 +10,7 @@ import (
 	pg_sql "github.com/aaronland/go-pagination-sql"
 	"github.com/sfomuseum/go-libraryofcongress-database"
 	"github.com/sfomuseum/go-timings"
+	_ "modernc.org/sqlite"
 )
 
 type SQLDatabase struct {
@@ -48,7 +49,9 @@ func NewSQLDatabase(ctx context.Context, uri string) (database.LibraryOfCongress
 		return nil, fmt.Errorf("Failed to contact database with '%s', %w", dsn, err)
 	}
 
-	if engine == "sqlite3" {
+	switch engine {
+
+	case "sqlite", "sqlite3":
 
 		pragma := []string{
 			"PRAGMA JOURNAL_MODE=OFF",
@@ -67,6 +70,8 @@ func NewSQLDatabase(ctx context.Context, uri string) (database.LibraryOfCongress
 				return nil, fmt.Errorf("Failed to set '%s', %w", p, err)
 			}
 		}
+	default:
+		//
 	}
 
 	tables_sql := []string{

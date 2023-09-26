@@ -66,19 +66,28 @@ func SourcesFromPaths(ctx context.Context, data_paths map[string]string) ([]*Sou
 
 		var r io.ReadCloser
 
-		fh, err := os.Open(path)
+		if path == "-" {
 
-		if err != nil {
-			return nil, fmt.Errorf("Failed to open %s, %v", path, err)
+			r = os.Stdin
+
+		} else {
+
+			fh, err := os.Open(path)
+
+			if err != nil {
+				return nil, fmt.Errorf("Failed to open %s, %v", path, err)
+			}
+
+			r = fh
 		}
 
 		ext := filepath.Ext(path)
 
 		switch ext {
 		case ".bz2":
-			r = io.NopCloser(bzip2.NewReader(fh))
+			r = io.NopCloser(bzip2.NewReader(r))
 		default:
-			r = fh
+			// pass
 		}
 
 		src := &Source{
