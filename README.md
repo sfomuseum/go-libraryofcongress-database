@@ -60,11 +60,17 @@ $> du -h -d 1 /usr/local/data/libraryofcongress.db/
 761M	libraryofcongress.db/
 ```
 
-It is also possible to index data from `STDIN`, for example using the output of the `parse-lcsh` tool in the [sfomuseum/go-libraryofcongress](https://github.com/sfomuseum/go-libraryofcongress#parse-lcsh) package:
+#### STDIN
+
+It is also possible to index data from `STDIN` by specifying the string "-" as the URI to read.
+
+For example, this command will stream and parse the contents of `https://id.loc.gov/download/lcsh.both.ndjson.zip` (using the `parse-lcsh` tool in the [sfomuseum/go-libraryofcongress](https://github.com/sfomuseum/go-libraryofcongress#parse-lcsh) package) and index each subject header in a SQLite database called `'loc.db`
 
 ```
-$> ./bin/parse-lcsh https://id.loc.gov/download/lcsh.both.ndjson.zip | \
-	../go-libraryofcongress-database/bin/index -database-uri 'sql://sqlite?dsn=test.db' -lcsh-data -
+$> ./parse-lcsh https://id.loc.gov/download/lcsh.both.ndjson.zip | \
+	./index \
+	-database-uri 'sql://sqlite?dsn=loc.db' \
+	-lcsh-data -
 ```
 
 ### server

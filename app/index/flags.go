@@ -14,10 +14,10 @@ func DefaultFlagSet() *flag.FlagSet {
 
 	fs := flagset.NewFlagSet("loc")
 
-	fs.StringVar(&database_uri, "database-uri", "", "...")
+	fs.StringVar(&database_uri, "database-uri", "", "A valid sfomuseum/go-libraryofcongress-database URI.")
 
-	fs.StringVar(&lcsh_data, "lcsh-data", "", "The path to your LCSH CSV data.")
-	fs.StringVar(&lcnaf_data, "lcnaf-data", "", "The path to your LCNAF CSV data.")
+	fs.StringVar(&lcsh_data, "lcsh-data", "", "The path to your LCSH CSV data. If '-' then data will be read from STDIN.")
+	fs.StringVar(&lcnaf_data, "lcnaf-data", "", "The path to your LCNAF CSV data. If '-' then data will be read from STDIN.")
 
 	return fs
 }
