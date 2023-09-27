@@ -33,6 +33,7 @@ Other database implementations include:
 * https://github.com/sfomuseum/go-libraryofcongress-database-docstore
 * https://github.com/sfomuseum/go-libraryofcongress-database-opensearch
 * https://github.com/sfomuseum/go-libraryofcongress-database-elasticsearch
+* https://github.com/sfomuseum/go-libraryofcongress-database-bleve
 
 ## Tools
 
